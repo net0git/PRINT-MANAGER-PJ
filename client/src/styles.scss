@@ -1,0 +1,803 @@
+html,
+body {
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  padding: 0;
+  margin: 0;
+}
+// *************************************************************************************
+
+:root {
+  --bg-color: #f8f9fa;
+  --text-main: #333;
+  --text-muted: #8898aa;
+  --border-color: #edf2f7;
+  --active-bg: #e6fffa;
+  --active-text: #2d3748;
+  --inactive-bg: #fff5f5;
+  --inactive-text: #c53030;
+  --primary-color: #2563eb;
+}
+
+.mb-4{
+  margin-bottom: 12px;
+}
+.mt-4{
+  margin-top: 12px;
+}
+// container general para cada pagina, con padding y margin
+.container {
+  padding: 10px;
+  margin: 10px;
+}
+
+// header general para cada pagina, con padding y margin*****************************
+.header-page {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-page-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-page-text label {
+  font-size: 25px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.header-page-text span {
+  font-size: 15px;
+  color: #64748b;
+}
+
+.button-primary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+// ESTRUCTRURA DE TABLA GENERAL-----------------------------------------------------------------
+.container-table {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-header {
+  padding: 25px;
+}
+
+.header-info {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.table-indicator {
+  font-size: 0.9rem;
+}
+
+thead th {
+  text-align: left;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-color);
+  border-bottom: none;
+}
+
+tbody td {
+  padding: 15px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+tbody tr:hover {
+  background-color: #c0dbf717;
+}
+
+// icon-pencil
+
+.icon-pencil {
+  font-size: 1rem;
+  color: #1e52ee;
+}
+
+.icon-trash {
+  font-size: 1rem;
+  color: #eb2222;
+}
+
+.edit-btn,
+.delete-btn {
+  background: transparent;
+  border: 1px solid transparent; /* importante */
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 6px 8px;
+  transition: all 0.2s ease;
+}
+
+.edit-btn:hover {
+  background-color: #046fe91f;
+  border-color: #1e52ee56;
+}
+
+.delete-btn:hover {
+  background-color: #eb222210;
+  border-color: #eb222223;
+}
+
+// icono de aprobacion
+.icon-aprobar {
+  font-size: 1rem;
+  color: #38a169;
+}
+.icon-rechazar {
+  font-size: 1rem;
+  color: #eb8d8d;
+}
+.icon-observar {
+  font-size: 1rem;
+  color: #949997;
+}
+
+.delete-ti-btn,
+.notice-btn {
+  background: transparent;
+  border: 1px solid transparent; /* importante */
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 6px 8px;
+  transition: all 0.2s ease;
+}
+
+.approve-ti-btn {
+  background: transparent;
+  border: 1px solid #38a16956;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 6px 8px;
+  transition: all 0.2s ease;
+
+  color: #38a169;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.delete-ti-btn,
+.notice-btn,
+.approve-ti-btn {
+  margin: 0px 5px;
+}
+
+.approve-ti-btn:hover {
+  background-color: #38a1691f;
+  border-color: #38a16956;
+}
+
+.delete-ti-btn:hover {
+  background-color: #eb222210;
+  border-color: #eb222223;
+}
+
+.notice-btn:hover {
+  background-color: #383fa10e;
+  border-color: #383fa12c;
+  color: #2563eb;
+}
+
+// BUSCQUEDA INTERN Y EXTERNA   ---------------------------------------------
+.search-base {
+  position: relative;
+
+  input, select {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+
+    &:focus {
+      border-color: #6b9cf84f;
+      box-shadow: 0 0 0 2px rgba(142, 162, 230, 0.39);
+    }
+  }
+}
+
+.search-container-in {
+  @extend .search-base;
+  width: 500px;
+
+  input {
+    background: #fcfcfc;
+  }
+}
+
+.search-container-out {
+  @extend .search-base;
+  width: 400px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+// --------------------------------------------------------------------------------------
+// BOTONES------------------------
+.download-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 5px 10px;
+  border-radius: 10px;
+  color: var(--text-muted);
+  transition: background-color 0.2s ease;
+}
+
+.download-btn:hover {
+  background-color: #64748b1e;
+}
+
+// STATUS DE ATENCION
+/* Status Badges */
+.status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.62rem;
+  font-weight: bold;
+}
+.detail-status {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.finish-status,
+.active-status {
+  background-color: #e6fffa;
+  color: #38a169;
+  border: 1px solid #38a16921;
+}
+
+.cancel-status,
+.inactive-status {
+  background-color: #fff5f5;
+  color: #e53e3e;
+  border: 1px solid #e53e3e23;
+}
+
+.info-status {
+  background-color: #fef3ca;
+  color: #b45309;
+  border: 1px solid #fef3ca;
+}
+
+.almcen-status {
+  background-color: #bdddf386;
+  color: #227ac2;
+  border: 1px solid #bad9f0;
+}
+
+// MODAL ------------------------------------------------------------------------------------------
+
+/* OVERLAY */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  /* DIFUMINADO */
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  /* ANIMACIÓN */
+  animation: fadeIn 0.25s ease;
+}
+.modal-header {
+  padding: 20px 40px;
+  border-bottom: 2px solid #edf2f7;
+}
+
+.modal-body {
+  padding: 20px 40px;
+}
+
+.modal-footer {
+  padding: 20px 40px;
+  border-top: 1px solid #edf2f7;
+  background-color: #efeff3da;
+}
+
+.neutral-btn {
+  height: 40px;
+  padding: 0 30px;
+  border: none;
+  border-radius: 12px;
+  background: #596788;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 15px;
+
+  transition: background-color 0.25s ease, transform 0.2s ease,
+    box-shadow 0.25s ease;
+}
+
+.neutral-btn:hover {
+  background: #272d38;
+  //   transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+}
+.neutral-btn:active {
+  transform: scale(0.98);
+}
+// BOTONES PARA EL MODAL candel / guardar del FOOTER
+.save-btn {
+  height: 40px;
+  padding: 0 30px;
+  border: none;
+  border-radius: 12px;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 15px;
+
+  transition: background-color 0.25s ease, transform 0.2s ease,
+    box-shadow 0.25s ease;
+}
+
+.save-btn:hover {
+  background: #1d4ed8;
+  //   transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+}
+.save-btn:active {
+  transform: scale(0.98);
+}
+.cancel-btn {
+  height: 40px;
+  background: none;
+  border: none;
+  font-size: 15px;
+  color: #64748b;
+  font-weight: 600;
+  padding: 0 30px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #4c57682a;
+  // transform:translateY(-1px);
+}
+
+// boton pequeño que se encuentra en el header
+.close-btn-modal {
+  width: 46px;
+  height: 46px;
+  border: none;
+  border-radius: 16px;
+  background: #f1f5f9;
+  font-size: 24px;
+  cursor: pointer;
+  color: #64748b;
+}
+
+// ESTILOS PARA EL FORMULARIO
+//  .modal-section {
+//   padding: 0 16px;
+//   margin-bottom: 12px;
+//   font-size: 12px;
+//   font-weight: 700;
+//   color: #9ca3af;
+//   letter-spacing: 1px;
+// }
+.close-btn {
+  width: 46px;
+  height: 46px;
+  border: none;
+  border-radius: 16px;
+  background: #f1f5f9;
+  font-size: 24px;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.cancel-btn-small {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
+}
+
+.cancel-btn-small:hover {
+  background-color: #4c57682a;
+  // transform:translateY(-1px);
+}
+// btn-aprobar
+.save-btn-aprobar {
+  height: 40px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 12px;
+  background: #059669;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  
+
+  transition: background-color 0.25s ease, transform 0.2s ease,
+    box-shadow 0.25s ease;
+}
+
+.save-btn-aprobar:hover {
+  background: #047e57;
+  //   transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+}
+.save-btn-aprobar:active {
+  transform: scale(0.98);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.section-title i {
+  font-size: 20px;
+  color: #85878a;
+}
+
+.section-title h4 {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #9ca3af;
+  font-weight: 700;
+  margin: 5px 0px;
+}
+// ROW
+.row {
+  display: flex;
+  gap: 20px;
+}
+// formulario
+.form-group {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+}
+.input-box {
+  height: 52px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #f8fafc;
+
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+}
+.input-box i {
+  color: #94a3b8;
+  font-size: 18px;
+}
+.input-box input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 15px;
+  color: #334155;
+}
+.input-box:focus-within {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+// ESTATUS BOX DE REGISTRO DE USUARIOS
+/* ROLE BOX */
+
+.role-box {
+  margin-top: 10px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 30px;
+  background: #f8fafc;
+
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+}
+
+.role-box select {
+  width: 260px;
+  height: 50px;
+  border-radius: 16px;
+  border: 1px solid #cbd5e1;
+  background: white;
+  padding: 0 16px;
+  font-size: 15px;
+  outline: none;
+}
+
+.role-box {
+  margin-top: 10px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 30px;
+  background: #f8fafc;
+  display: flex;
+  gap: 24px;
+  align-items: center; /* cambia esto */
+}
+.status-box {
+  min-width: 260px;
+  height: 50px;
+
+  background: #fff;
+  border: 1px solid #dbe4f0;
+  border-radius: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 18px;
+}
+
+.status-box strong {
+  font-size: 14px;
+  color: #0f172a;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.status-box p {
+  font-size: 12px;
+  color: #94a3b8;
+  white-space: nowrap;
+  margin: 0px;
+  padding: 0px;
+}
+
+// SLADER
+/* SWITCH */
+
+.switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #2563eb;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  top: 3px;
+  right: 3px;
+}
+
+.switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #cbd5e1;
+  border-radius: 999px;
+  cursor: pointer;
+
+  transition: background 0.25s ease;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+
+  width: 18px;
+  height: 18px;
+
+  left: 3px;
+  top: 3px;
+
+  background: white;
+  border-radius: 50%;
+
+  transition: transform 0.25s ease;
+}
+.switch input:checked + .slider {
+  background: #2563eb;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(20px);
+}
+
+// BOTONES PARA APROBAR / RECHAZAR / OBSERVAR
+// aprobar
+.approve-btn {
+  background: transparent;
+  border: 1px solid #38a16956;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 6px 8px;
+  transition: all 0.2s ease;
+
+  color: #38a169;
+  font-weight: bold;
+  font-size: 0.9rem;
+
+  margin: 0px 5px;
+}
+
+.approve-btn:hover {
+  background-color: #38a1691f;
+  border-color: #38a16956;
+}
+// rechazar
+.disapprove-btn {
+  background: transparent;
+  border: 1px solid #e53e3e23;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #e53e3e;
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding: 6px 8px;
+  margin: 0px 5px;
+  transition: all 0.2s ease;
+}
+
+.disapprove-btn:hover {
+  background-color: #e53e3e1f;
+  border-color: #e53e3e23;
+}
+// observar
+.icon-observar {
+  font-size: 1rem;
+  color: #949997;
+}
+.notice-btn {
+  background: transparent;
+  border: 1px solid transparent; /* importante */
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 6px 8px;
+  transition: all 0.2s ease;
+  margin: 0px 5px;
+}
+
+.notice-btn:hover {
+  background-color: #9596a50e;
+  border-color: #5f60702c;
+}
+
+// ANIMACIONES PARA EL MODAL
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+.flex {
+  display: flex;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.aling-center {
+  align-items: center;
+}
+
+.gap-4 {
+  gap: 10px;
+}
+

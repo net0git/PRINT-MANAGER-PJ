@@ -1,0 +1,207 @@
+<div class="container">
+    <div class="header-page">
+        <div class="header-page-text">
+            <label>Gestión de Usuarios</label>
+            <span>
+                Administre las cuentas, roles y estados de acceso al sistema.
+            </span>
+        </div>
+
+        <div>
+            <button class="button-primary button-primary-shadow" (click)="openModalUsuarioCreate()">
+                <i class="bi bi-person-plus icon-button"></i>
+                Nuevo Usuario
+            </button>
+        </div>
+    </div>
+    <br>
+    <div class="container-table">
+        <div class="table-header">
+            <div class="table-header-box">
+                <div class="search-container-in">
+                    <span class="search-icon"><i class="bi bi-search"></i></span>
+                    <input type="text" placeholder="Buscar por nombre o correo..." (input)=" buscarEnObjeto($event)">
+                </div>
+                <div class="header-info">
+                    <span class="table-indicator">{{listUsers.length}} usuarios en total</span>
+                    <button class="download-btn" (click)="exportToExcel()"><i class="bi bi-download"></i></button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Tabla -->
+        <table>
+            <thead>
+                <tr>
+                    <th>USUARIO</th>
+                    <th>ROL DEL SISTEMA</th>
+                    <th>FECHA REGISTRO</th>
+                    <th>ESTADO</th>
+                    <th>ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of listUsers">
+                    <td>
+                        <div class="user-info">
+                            <div class="avatar">{{ user.nombre.charAt(0) }}</div>
+                            <div>
+                                <div class="name">{{user.nombre}} {{user.ap_paterno}} {{user.ap_materno}}</div>
+                                <div class="email">{{user.correo}} / tel: {{user.telefono}}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="dot" [ngClass]="getRoleClass(user.rol)"></span>
+                        {{ user.rol }}
+                    </td>
+                    <td>{{user.created_at | date:'dd-MM-yyyy'}}</td>
+                    <td>
+                        <span class="status" [ngClass]="user.estado ? 'active-status' : 'inactive-status'">
+                            {{ user.estado ? 'ACTIVO' : 'INACTIVO' }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <button class="edit-btn" (click)="openModalUsuarioUpdate(user)"><i class="bi bi-pencil icon-pencil" ></i></button>
+                            <button *ngIf="user.id_usuario !== 1" class="delete-btn" (click)="deleteUser(user.id_usuario)"><i class="bi bi-trash icon-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- MODAL USUARIO -->
+<div class="modal-overlay" *ngIf="isModalOpen">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+        <!-- HEADER -->
+        <div class="modal-header">
+            <div>
+                <h2>Registro de Usuario</h2>
+                <p>Complete la información para registrar una nueva cuenta.</p>
+            </div>
+            <button class="close-btn-modal" (click)="closeModalUsuario()">×</button>
+        </div>
+
+        <!-- BODY -->
+        <div class="modal-body">
+            <!-- SECTION -->
+            <div class="section-title">
+                <i class="bi bi-person-vcard"></i>
+                <h4>INFORMACIÓN PERSONAL</h4>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label>NOMBRE(s)</label>
+                    <div class="input-box">
+                        <i class="bi bi-person-circle"></i>
+                        <input type="text" placeholder="Ej: Ricardo Milos" name="nombre" [(ngModel)]="userForm.nombre" appSoloLetras>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>AP PATERNO</label>
+                    <div class="input-box">
+                        <!-- <i class="bi bi-person-circle"></i> -->
+                        <input type="text"  name="ap_paterno" [(ngModel)]="userForm.ap_paterno" appSoloLetras>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>AP MATERNO</label>
+                    <div class="input-box">
+                        <!-- <i class="bi bi-person-circle"></i> -->
+                        <input type="text"  name="ap_materno" [(ngModel)]="userForm.ap_materno" appSoloLetras>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label>CORREO ELECTRÓNICO</label>
+                    <div class="input-box">
+                        <i class="bi bi-envelope"></i>
+                        <input type="email" placeholder="correo@empresa.com" name="correo"
+                            [(ngModel)]="userForm.correo">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>TELÉFONO</label>
+                    <div class="input-box">
+                        <i class="bi bi-telephone"></i>
+                        <input type="text" placeholder="+56 9..." name="telefono" [(ngModel)]="userForm.telefono" maxlength="9" appSoloNumeros  >
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION -->
+            <div class="section-title">
+                <span><i class="bi bi-key-fill"></i></span>
+                <h4>CREDENCIALES DE ACCESO</h4>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label>USERNAME</label>
+                    <div class="input-box">
+                        <i class="bi bi-person"></i>
+                        <input type="text" placeholder="username" name="username" [(ngModel)]="userForm.username">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>PASSWORD <span>(123456)</span></label>
+                    <div class="input-box">
+                        <i class="bi bi-lock"></i>
+                        <input type="password" placeholder="••••••••" name="password" [(ngModel)]="userForm.password">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROLE BOX -->
+            <div class="role-box">
+
+                <div class="form-group">
+                    <label>ROL EN EL SISTEMA</label>
+
+                    <select [(ngModel)]="rolSeleccionado">
+                        <option value="0" disabled selected>Seleccione un rol...</option>
+                        <option *ngFor="let item of rolList" [value]="item.id_rol">
+                            {{ item.rol }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="status-box">
+                    <div>
+                        <strong>
+                            Estado:
+                            <span [class.active]="isActive" [class.inactive]="!isActive">
+                                {{ isActive ? 'Activo' : 'Inactivo' }}
+                            </span>
+                        </strong>
+                        <p>Habilitar acceso inmediato</p>
+                    </div>
+
+                    <label class="switch">
+                        <input type="checkbox" [(ngModel)]="isActive">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="modal-footer">
+            <div class="modal-footer-box">
+                <button class="cancel-btn" (click)="closeModalUsuario()">Cancelar</button>
+                <button class="save-btn" (click)="Action()">{{modificarUsuario ? 'Actualizar Usuario' : 'Guardar Usuario'}}</button>
+            </div>
+        </div>
+    </div>
+</div>

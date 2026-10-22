@@ -1,0 +1,458 @@
+<div class="printer-container">
+    <div class="printer-card">
+        <div class="marcador-box">
+            <i class="bi bi-journal-text marcador-icon marcador-color-solicitudes"></i>
+            <div class="marcador-text">
+                <h4>Total Solicitudes</h4>
+                <p>{{totalSolicitudes}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="printer-card">
+        <div class="marcador-box">
+            <i class="bi bi-shield-check marcador-icon marcador-color-pendientes"></i>
+            <div class="marcador-text">
+                <h4>Pendientes en TI</h4>
+                <p>{{totalPendentes}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="printer-card">
+        <div class="marcador-box">
+            <i class="bi bi-box-seam marcador-icon marcador-color-almacen"></i>
+            <div class="marcador-text">
+                <h4>En Almacén</h4>
+                <p>{{totalAlmacen}}</p>
+            </div>
+        </div>
+
+    </div>
+    <div class="printer-card">
+        <div class="marcador-box">
+            <i class="bi bi-check2-circle marcador-icon marcador-color-finalizados"></i>
+            <div class="marcador-text">
+                <h4>Finalizados</h4>
+                <p>{{totalFinalizados}}</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+<br>
+
+<div class="container-table">
+    <div class="table-header">
+        <div class="box-search">
+            <div class="search-container-in">
+                <span class="search-icon"><i class="bi bi-search"></i></span>
+                <input type="text" placeholder="Buscar por marcas, modelos o codigos de insumos..."
+                    (input)="buscarEnObjeto($event)">
+            </div>
+            <div class="header-info"
+                *ngIf="historialTicketsTemp.length == historialTickets.length ; else resultadoBusqueda">
+                <span class="table-indicator"> Mostrando todas las marcas</span>
+            </div>
+            <ng-template #resultadoBusqueda>
+                <div class="header-info">
+                    <span class="table-indicator">
+                        Mostrando {{historialTickets.length}} de {{historialTicketsTemp.length}} Solicitudes
+                    </span>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+
+    <!-- Tabla -->
+    <table>
+        <colgroup>
+            <col style="width:12%">
+            <col style="width:16%">
+            <col style="width:30%">
+            <col style="width:9%">
+            <col style="width:16%">
+            <col style="width:15%">
+            <col style="width:1%">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>ID/ FECHA</th>
+                <th>INFORMACIÓN IMPRESORA</th>
+                <th>AREA</th>
+                <th>CONSUMIBLE</th>
+                <th>USUARIO</th>
+                <th>ESTADO</th>
+                <th>ACCION</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let ticket of historialTickets">
+                <td>
+                    <div class="info-req">
+                        <div class="id_req">{{ ticket.codigo }}</div>
+                        <div class="fecha_req">
+                            <i class="bi bi-clock"></i>
+                            {{ ticket.created_at | date:'yyyy-MM-dd HH:mm' }}
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    <div>
+                        <div>
+                            <strong> {{ ticket.impresora.modelo }}</strong>
+                        </div>
+
+                        <div class="info-print">
+                            <div class="marca_print">
+                                <span class="dot"></span>
+                                {{ ticket.impresora.marca }}
+                            </div>
+                            <div class="ip_print">
+                                IP: {{ ticket.impresora.ip }}
+                            </div>
+
+
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="user-info">
+
+                        <div>
+                            <div class="name">
+                                {{ ticket.area.area }}
+                            </div>
+
+                            <div class="email ">
+                                {{ ticket.area.sede.sede }}
+                            </div>
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    <span class="componente">
+                        {{ ticket.consumible.tipo_consumible }}
+                    </span>
+                </td>
+
+                <td>
+                    <div class="user-info">
+                        <div class="avatar">
+                            {{ ticket.usuario.nombre.charAt(0) }}
+                        </div>
+
+                        <div>
+                            <div class="name">
+                                {{ ticket.usuario.nombre }}
+                            </div>
+
+                            <div class="email">
+                                {{ ticket.usuario.correo }}
+                            </div>
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    <span class="status active-status" [ngClass]="{
+                    'info-status': ticket.estado_general === 'I',
+                    'almcen-status': ticket.estado_general === 'A',
+                    'finish-status': ticket.estado_general === 'F',
+                    'cancel-status': ticket.estado_general === 'R'
+                }">
+                        {{ ticket.estado_general_descripcion }}
+                    </span>
+                </td>
+
+                <td>
+                    <div class="actions">
+                        <button class="notice-btn" (click)="openModalDetalle(ticket)">
+                            <i class="bi bi-eye icon-observar"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<div class="empty-state" *ngIf="historialTicketsTemp.length === 0 ">
+        <i class="bi bi-check-circle"></i>
+        <p>A la espera de nuevas solicitudes.</p>
+    </div>
+
+<!-- MODAL DETALLE-->
+<div class="modal-overlay" *ngIf="isModalOpenDetalle">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+        <!-- HEADER -->
+        <div class="modal-header">
+            <div class="header-box">
+                <div>
+                    <h2><span class="status detail-status">DETALLE</span>{{dataTicketDetalle?.codigo}}</h2>
+                    <p>Solicitud creada el {{dataTicketDetalle?.created_at | date:'yyyy-MM-dd HH:mm'}}</p>
+                </div>
+                <button class="close-btn" (click)="closeModalDetalle()">×</button>
+            </div>
+
+        </div>
+
+        <!-- BODY -->
+        <div class="modal-body">
+
+            <!-- ESTADO DE VALIDADCION -->
+            <section>
+                <div class="section-title">
+                    <h4>ESTADO DEL PEDIDO</h4>
+                </div>
+                <div class="timeline">
+
+                    <!-- ITEM SOLICIT -->
+                    <div class="timeline-item completed">
+
+                        <div class="circle">
+                            <i class="bi bi-check-lg"></i>
+                        </div>
+
+                        <div class="content">
+                            <h4>Solicitado</h4>
+                            <p>{{dataTicketDetalle?.created_at | date: 'dd/MM/yyyy'}}</p>
+                        </div>
+
+                    </div>
+
+                    <!-- LINE -->
+                    <div class="line"></div>
+
+                    <!-- ITEM -->
+                    <div class="timeline-item" [ngClass]="{
+                                'completed': dataTicketDetalle?.estado?.informatica?.estado === true,
+                                'cancel': dataTicketDetalle?.estado?.informatica?.estado === false,
+                                'active': dataTicketDetalle?.estado?.informatica?.estado == null
+                            }">
+
+                        <div class="circle">
+                            <i *ngIf="dataTicketDetalle?.estado?.informatica?.estado === true"
+                                class="bi bi-check-lg"></i>
+
+                            <i *ngIf="dataTicketDetalle?.estado?.informatica?.estado === false" class="bi bi-x-lg"></i>
+
+                            <span *ngIf="dataTicketDetalle?.estado?.informatica?.estado == null"></span>
+                        </div>
+
+                        <div class="content">
+                            <h4>Validación IT</h4>
+                            <p>
+                                <i class="bi bi-person-fill" title="{{dataTicketDetalle?.estado?.informatica?.nombre}}"></i>
+                                {{ dataTicketDetalle?.estado?.informatica?.fecha
+                                ? (dataTicketDetalle?.estado?.informatica?.fecha | date:'dd/MM/yyyy')
+                                : 'En espera'
+                                }}
+                            </p>
+                        </div>
+
+
+
+                    </div>
+
+                    <!-- LINE -->
+                    <div class="line"></div>
+
+                    <!-- ITEM -->
+                    <div class="timeline-item" [ngClass]="{
+                                'completed': dataTicketDetalle?.estado?.almacen?.estado === true,
+                                'cancel': dataTicketDetalle?.estado?.almacen?.estado === false,
+                                'active': dataTicketDetalle?.estado?.almacen?.estado == null && dataTicketDetalle?.estado?.informatica?.estado == true,
+                                '': dataTicketDetalle?.estado?.almacen?.estado == null && dataTicketDetalle?.estado?.informatica?.estado == null,
+                                '': dataTicketDetalle?.estado?.almacen?.estado == null && dataTicketDetalle?.estado?.informatica?.estado == false
+                            }">
+
+                        <div class="circle">
+                            <i *ngIf="dataTicketDetalle?.estado?.almacen?.estado === true" class="bi bi-check-lg"></i>
+
+                            <i *ngIf="dataTicketDetalle?.estado?.almacen?.estado === false" class="bi bi-x-lg"></i>
+
+                            <span *ngIf="dataTicketDetalle?.estado?.almacen?.estado == null"></span>
+                        </div>
+
+                        <div class="content">
+                            <h4>En Almacén </h4>
+                            <p>
+                                <i class="bi bi-person-fill" title="{{dataTicketDetalle?.estado?.almacen?.nombre}}"></i>
+                                {{ dataTicketDetalle?.estado?.almacen?.fecha
+                                ? (dataTicketDetalle?.estado?.almacen?.fecha | date:'dd/MM/yyyy')
+                                : 'En espera'
+                                }}
+                            </p>
+                        </div>
+
+
+
+                    </div>
+
+                    <!-- LINE -->
+                    <div class="line"></div>
+
+                    <!-- ITEM -->
+                    <div class="timeline-item" [ngClass]="{
+                                'completed': dataTicketDetalle?.estado?.almacen?.estado === true,
+                                '': dataTicketDetalle?.estado?.almacen?.estado === false,
+                                '': dataTicketDetalle?.estado?.almacen?.estado == null
+                            }">
+
+                        <div class="circle">
+                            <i *ngIf="dataTicketDetalle?.estado?.almacen?.estado === true" class="bi bi-check-lg"></i>
+
+                            <i *ngIf="dataTicketDetalle?.estado?.almacen?.estado === false" class="bi bi-x-lg"></i>
+
+                            <span *ngIf="dataTicketDetalle?.estado?.almacen?.estado == null "></span>
+                        </div>
+
+                        <div class="content">
+                            <h4>Entregado </h4>
+                            <p *ngIf="dataTicketDetalle?.estado_general !== 'R'; else rechazado">
+                                {{
+                                dataTicketDetalle?.estado?.almacen?.fecha
+                                ? (dataTicketDetalle?.estado?.almacen?.fecha | date:'dd/MM/yyyy')
+                                : 'En espera'
+                                }}
+                            </p>
+
+                            <ng-template #rechazado>
+                                <p>Rechazado</p>
+                            </ng-template>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </section>
+            <!-- <section class="section-status">
+                <p>Estado de validación:</p>
+                <div *ngIf="dataTicketDetalle as ticket">
+                    <span class="status active-status" [ngClass]="{
+                                'info-status': ticket.estado_general === 'I',
+                                'almcen-status': ticket.estado_general === 'A',
+                                'finish-status': ticket.estado_general === 'F',
+                                'cancel-status': ticket.estado_general === 'R'
+                            }">
+                        {{ ticket.estado_general_descripcion }}
+                    </span>
+                </div>
+
+            </section> -->
+            <section>
+                <div class="info-box-rechazo" *ngIf="dataTicketDetalle?.estado_general === 'R'">
+                    <h4>MOTIVO DEL RECHAZO:</h4>
+                    <p>{{dataTicketDetalle?.estado?.informatica?.mensaje}}</p>
+                    <p>{{dataTicketDetalle?.estado?.almacen?.mensaje}}</p>
+                </div>
+            </section>
+            <!-- SECTION INFORMACION DEL EQUIPO-->
+            <section class="mb-4">
+                <div class="section-title">
+                    <h4>INFORMACIÓN DEL EQUIPO</h4>
+                </div>
+                <div class="info-box">
+                    <div class="flex justify-between">
+                        <p>Modelo:</p>
+                        <h4>{{ dataTicketDetalle?.impresora?.modelo || 'Sin información' }}</h4>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <p>Marca:</p>
+                        <label>{{ dataTicketDetalle?.impresora?.marca || 'Sin información' }}</label>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <p>Dirección IP:</p>
+                        <span style="font-size: 0.8rem; opacity: 0.75;">
+                            {{ dataTicketDetalle?.impresora?.ip || 'Sin información' }}
+                        </span>
+                    </div>
+                </div>
+            </section>
+            <section class="mb-4">
+                <div class="section-title">
+                    <h4>SEDE Y AREA DESTINO</h4>
+                </div>
+                <div class="info-box">
+                    <div class="flex justify-between">
+                        <p for="">Area:</p>
+                        <h4>{{dataTicketDetalle?.area?.area || 'Sin información'}}</h4>
+                    </div>
+                    <div class="flex justify-between">
+                        <p for="">Sede:</p>
+                        <label>{{dataTicketDetalle?.area?.sede?.sede || 'Sin información'}}</label>
+                    </div>
+                </div>
+            </section>
+            <section class="mb-4">
+                <div class="section-title">
+                    <h4>CONSUMIBLE SOLICITADO</h4>
+                </div>
+                <div class="info-box">
+                    <div class="flex justify-between">
+                        <p for="">{{dataTicketDetalle?.consumible?.tipo_consumible}}:</p>
+                        <h4>fecha {{dataTicketDetalle?.created_at | date:'yyyy-MM-dd HH:mm'}}</h4>
+                    </div>
+                    <div class="flex justify-between" *ngIf="dataTicketDetalle?.consumible?.nro_parte !== null">
+                        <p>consumible:</p>
+                        <label>{{ dataTicketDetalle?.consumible?.nro_parte }}</label>
+                    </div>
+                </div>
+            </section>
+            <section class="mb-4">
+                <div class="section-title">
+                    <h4>USUARIO SOLICITANTE</h4>
+                </div>
+                <div class="user-info">
+                    <div class="avatar">
+                        {{ dataTicketDetalle?.usuario?.nombre?.charAt(0) }}
+                    </div>
+
+                    <div>
+                        <div class="name">
+                            {{dataTicketDetalle?.usuario?.nombre +" "+ dataTicketDetalle?.usuario?.ap_paterno +" "+
+                            dataTicketDetalle?.usuario?.ap_materno}}
+                        </div>
+
+                        <div class="email">
+                            {{dataTicketDetalle?.usuario?.correo}} / {{dataTicketDetalle?.usuario?.telefono}}
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- <div class="flex" *ngIf="dataTicketDetalle?.descripcion !== null">
+                    <label>Comentario: {{ dataTicketDetalle?.descripcion }}</label>
+                </div> -->
+            </section>
+
+            <div class="ti-box" *ngIf="dataTicketDetalle?.descripcion !== null">
+                <!-- <h4>comnetario usuario:</h4> -->
+                <label for="" class="ti-text">{{ dataTicketDetalle?.descripcion }}</label>
+
+            </div>
+        </div>
+
+
+        <!-- FOOTER -->
+        <div class="modal-footer">
+            <div class="atencion-box">
+                <!-- <div class="atencion-icon">
+                    <i class="bi bi-person"></i>
+                </div>
+                <div class="atencion-text">
+                    <h4>ATENDIDO POR</h4>
+                    <p>Juan Pérez</p>
+                </div> -->
+            </div>
+            <button class="neutral-btn" (click)="closeModalDetalle()">Entendido</button>
+        </div>
+    </div>
+</div>

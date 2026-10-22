@@ -1,0 +1,179 @@
+/* User Column */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background-color: #e2e8f0;
+  border-radius: 12px;
+  border: 1px solid #d3d6da83;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.name {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.email {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Dots for Roles */
+.dot {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.dot-gray {
+  background-color: #a0aec0;
+}
+.dot-blue {
+  background-color: #4299e1;
+}
+.dot-purple {
+  background-color: #9f7aea;
+}
+.dot-red {
+  background-color: #f56565;
+}
+
+/* Status Badges */
+.status {
+  font-size: 0.68rem;
+}
+
+
+
+tbody tr:hover .avatar {
+  background-color: #c8defa;
+  border-color: #93c5fd;
+  color: #2563eb;
+  // transform: scale(1.05);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+}
+
+tbody tr:hover .actions {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+/* MODAL */
+
+.modal {
+  width: 700px;
+  background: white;
+  border-radius: 35px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  /* ANIMACIÓN */
+  animation: modalIn 0.28s ease;
+}
+
+// .active{
+//     color:#22c55e;
+// }
+
+// .inactive{
+//     color:#ef4444;
+// }
+
+
+// HEADER TABLE
+.table-header-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// BOTONES-------------------------------------------
+.edit-btn,
+.delete-btn {
+  background: transparent;
+  border: 1px solid transparent; /* importante */
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 6px 8px;
+  transition: all 0.2s ease;
+}
+
+.edit-btn:hover {
+  background-color: #046fe91f;
+  border-color: #1e52ee56;
+}
+
+.delete-btn:hover {
+  background-color: #eb222210;
+  border-color: #eb222223;
+}
+// ICONOS DE ACCIONES------------------------
+
+.icon-pencil {
+  font-size: 1rem;
+  color: #1e52ee;
+}
+
+.icon-trash {
+  font-size: 1rem;
+  color: #eb2222;
+}
+
+.modal-header {
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+}
+
+.modal-header h2 {
+  font-size: 20px;
+  color: #1e293b;
+  margin-bottom: 2px;
+}
+
+.modal-header p {
+  color: #64748b;
+  margin: 0px;
+  padding: 0px;
+}
+
+.section-title h4{
+color: #1e52eec4;
+}
+
+.modal-footer-box{
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+}
+// ESTATUS BOX DE REGISTRO DE USUARIOS
+.active{
+    color:#22c55e;
+}
+
+.inactive{
+    color:#ef4444;
+}

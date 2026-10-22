@@ -1,0 +1,75 @@
+.modal {
+  width: 700px;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  /* ANIMACIÓN */
+  animation: modalIn 0.28s ease;
+}
+
+.modal-header {
+  background-color: #2563eb;
+}
+.modal-header h2 {
+  font-size: 20px;
+  color: #fcfcfc;
+  margin-bottom: 2px;
+}
+
+.modal-header p {
+  color: #b4cff7;
+  margin: 0px;
+  padding: 0px;
+}
+
+.modal-body {
+  padding: 30px 40px;
+  background-color: #fcfcfc;
+}
+
+// Panel Solicitud
+.panel-solicitud {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  height: 80vh;
+  background-color: #f5f6fa;
+  padding-left: 8%;
+  margin-top: -10px;
+}
+
+
+.search-container-out{
+    width: 100%;
+    margin-bottom: 12px;
+    margin-top: 4px;
+    input {
+        padding: 6px;
+    }
+    select {
+        padding: 12px;
+    }
+}
+
+.status{
+  font-size: 0.62rem;
+  margin-right: 8px;
+
+}
+
+.label-message{
+  font-size: 0.9rem ;
+  color: #9a9da1;
+  // padding:  10px 10px;
+}
+
+.modal-footer {
+  padding: 25px 40px;
+  border-top: 1px solid #edf2f7;
+
+  display: flex;
+   justify-content: flex-end;
+  background-color: #efeff3da;
+  gap: 20px;
+}

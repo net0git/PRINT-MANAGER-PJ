@@ -1,0 +1,173 @@
+<div class="reset-page">
+    <header class="top-header">
+        <div class="header-container">
+            <div class="brand">
+                <div class="brand-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H9v4a2 2 0 002 2zm6-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                        </path>
+                    </svg>
+                </div>
+
+                <div class="brand-text">
+                    <h1>PrintManager</h1>
+                    <p>Portal de Gestión de Componentes</p>
+                </div>
+            </div>
+
+            <a href="#" class="back-login" (click)="volver()">
+                <i class="bi bi-arrow-left-circle" style=" font-size: 1rem;"></i>
+                <!-- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
+                    </path>
+                </svg> -->
+                <span >Volver al Login</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="form-container">
+
+            <div class="card">
+
+                @if (!isSuccess()) {
+
+                <div class="fade-in">
+
+                    <div class="form-header">
+                        <div class="key-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 0121 9z">
+                                </path>
+                            </svg>
+                        </div>
+
+                        <h2>Restaurar Contraseña</h2>
+
+                        <p>
+                            Ingresa tu nombre de usuario registrado para generar y
+                            restablecer una nueva contraseña de acceso.
+                        </p>
+                    </div>
+
+                    <form (submit)="handleRestore($event)" class="restore-form">
+
+                        <div class="form-group">
+
+                            <label for="username">
+                                Usuario <span>*</span>
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-person input-icon" style=" font-size: 1.1rem;"></i>
+
+                                <input type="text" id="username" [value]="username()" (input)="onInputChange($event)"
+                                    placeholder="Nombre de usuario" [class.input-error]="errorMessage()">
+                            </div>
+
+                            @if (errorMessage()) {
+                            <p class="error-message">
+                                <i class="bi bi-exclamation-circle " style=" font-size: 0.9rem;"></i>
+                                <span>{{ errorMessage() }}</span>
+                            </p>
+                            }
+
+                        </div>
+
+                        <button type="submit" class="restore-button" [disabled]="isLoading()" >
+                            @if (isLoading()) {
+                            <span>Restaurando...</span>
+                            <span class="spinner-border" role="status" aria-hidden="true"></span>
+                            } @else {
+                            <span>Restaurar contraseña</span>
+                            }
+                        </button>
+
+
+                    </form>
+                </div>
+
+                } @else {
+
+                <div class="fade-in">
+
+                    <div class="success-header">
+
+                        <div class="success-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M5 13l4 4L19 7">
+                                </path>
+                            </svg>
+                        </div>
+
+                        <h3>¡Contraseña Restaurada!</h3>
+
+                        <p>
+                            Se ha generado exitosamente una nueva clave de acceso.
+                        </p>
+
+                    </div>
+
+                    <div class="password-card">
+
+                        <div class="user-row">
+                            <span>Usuario:</span>
+                            <strong>{{ submittedUser() }}</strong>
+                        </div>
+
+                        <div class="password-section">
+
+                            <span class="password-label">
+                                Nueva Contraseña:
+                            </span>
+
+                            <div class="password-display">
+
+                                <code>{{ newPassword() }}</code>
+
+                                <button type="button" class="copy-button" (click)="copyPassword()">
+                                    <i class="bi bi-copy " style=" font-size: 0.9rem;"></i>
+                                   
+                                    <span>
+                                        {{ isCopied() ? '¡Copiado!' : 'Copiar' }}
+                                    </span>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="success-actions">
+
+                        <button type="button" class="login-button" (click)="volver()">
+                            Iniciar Sesión con Nueva Contraseña
+                        </button>
+
+                        <button type="button" class="another-button" (click)="resetForm(true)">
+                            Restaurar otra cuenta
+                        </button>
+
+                    </div>
+
+                </div>
+
+                }
+
+            </div>
+
+            <p class="footer">
+                &copy; 2026 V1.0.0 PrintManager Gestion de Componentes de la Corte Superior de Justicia de Cusco. Todos los derechos reservados.
+            </p>
+
+        </div>
+    </main>
+</div>

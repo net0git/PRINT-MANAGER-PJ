@@ -1,0 +1,281 @@
+<div class="container">
+    <div class="header-page">
+        <div class="header-page-text">
+            <label>Gestión de Ubicaciones</label>
+            <span>
+                Gestione las marcas autorizadas de impresión corporativa y los suministros compatibles para cada modelo
+                de hardware.
+            </span>
+        </div>
+
+        <div class="header-buttons">
+            <button class="button-primary button-primary-shadow" (click)="openModalSedeCreate()">
+                <i class="bi bi-plus icon-button"></i>
+                Nueva Sede
+            </button>
+            <!-- <div (click)="printConfig()">
+                <i class="bi bi-gear icon-edit-catalogo"></i>
+            </div> -->
+        </div>
+    </div>
+    <br>
+    <div class="printer-container">
+        <div class="printer-card">
+            <div class="marcador-box">
+                <i class="bi bi-journal-text marcador-icon marcador-color-solicitudes"></i>
+                <div class="marcador-text">
+                    <h4>Total de sedes</h4>
+                    <p>{{listSedesTemp.length}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="printer-card">
+            <div class="marcador-box">
+                <i class="bi bi-shield-check marcador-icon marcador-color-pendientes"></i>
+                <div class="marcador-text">
+                    <h4>Areas activas</h4>
+                    <p>{{getAreasActivas()}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="printer-card">
+            <div class="marcador-box">
+                <i class="bi bi-box-seam marcador-icon marcador-color-almacen"></i>
+                <div class="marcador-text">
+                    <h4>Areas Totales</h4>
+                    <p>{{getAreasTotales()}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="search-card">
+        <div class="box-search">
+            <div class="search-container-in">
+                <span class="search-icon"><i class="bi bi-search"></i></span>
+                <input type="text" placeholder="Buscar por sedes, instancias o areas..."
+                    (input)="buscarEnObjeto($event)">
+            </div>
+            <div class="header-info" *ngIf="listSedes.length == listSedesTemp.length ; else resultadoBusqueda">
+                <span class="table-indicator"> Mostrando todas las Sedes</span>
+            </div>
+            <ng-template #resultadoBusqueda>
+                <div class="header-info">
+                    <span class="table-indicator">
+                        Mostrando {{ listSedes.length }} de {{ listSedesTemp.length }} Sedes
+                    </span>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+
+    <div class="empty-state" *ngIf="listSedesTemp.length === 0">
+        <i class="bi bi-exclamation-triangle"></i>
+        <p>No hay sedes registradas.</p>
+        <label (click)="openModalSedeCreate()">+ Agregar una nueva sede</label>
+    </div>
+    <div class="empty-state" *ngIf="listSedesTemp.length !== 0 &&  listSedes.length === 0">
+        <i class="bi bi-exclamation-triangle"></i>
+        <p>No se encontraron resultados.</p>
+    </div>
+    <br>
+
+    @for (sede of listSedes; track sede.id_sede) {
+
+    <div class="brand-card">
+
+        <div class="brand-header">
+            <div class="brand-info">
+                <i class="bi bi-bank icon-brand-marca"></i>
+                <div class="brand-print-info">
+                    <h2>{{ sede.sede }} <span class="status"
+                            [ngClass]="sede.estado ? 'active-status' : 'inactive-status'">
+                            {{ sede.estado ? 'ACTIVO' : 'INACTIVO' }}
+                        </span> </h2>
+
+                    <p style="margin-top: 4px;"><i class="bi bi-geo-alt-fill"></i> {{ sede.direccion }}</p>
+                </div>
+
+            </div>
+
+            <div class="brand-info">
+                <button class="action-btn-model" (click)="openModalAreaCreate(sede)">
+                    <i class="bi bi-plus-circle"></i> Agregar Area
+                </button>
+                <i class="bi bi-pencil-fill icon-edit-marca" (click)="openModalSedeUpdate(sede)"></i>
+            </div>
+
+        </div>
+
+        <div class="models-container">
+            <div class="empty-models" *ngIf="sede.areas == null || sede.areas.length === 0">
+                <i class="bi bi-box-seam"></i>
+                <p>No hay áreas registradas</p>
+                <span>Esta sede todavía no tiene áreas asociadas.</span>
+                <label type="button" (click)="openModalAreaCreate(sede)">
+                    <i class="bi bi-plus"></i>
+                    Agregar área
+                </label>
+            </div>
+            @for (area of sede.areas; track area.id_area) {
+
+            <div class="model-row">
+
+                <div class="model-info">
+                    <div class="model-icon">
+                        <i class="bi bi-building-fill"></i>
+                    </div>
+
+                    <div>
+                        <div class="model-name">
+                            {{ area.area }}
+                        </div>
+                        <div>
+                            <label for="" class="model-caracteristica">{{ area.referencia }}</label>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="actions">
+                    <span class="status" [ngClass]="area.estado ? 'active-status' : 'inactive-status'">
+                        {{ area.estado ? 'ACTIVO' : 'INACTIVO' }}
+                    </span>
+                    <div title="modificar modelo" (click)="openModalAreaUpdate(sede,area)">
+                        <i class="bi bi-pencil-fill icon-edit-model"></i>
+                    </div>
+                    <div title="eliminar modelo">
+                        <i class="bi bi-trash-fill icon-delete-model"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+            }
+
+        </div>
+
+    </div>
+    <br>
+    }
+</div>
+
+<!-- MODAL SEDE -->
+<div class="modal-overlay" *ngIf="isModalOpenSede">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+        <!-- HEADER -->
+        <div class="modal-header">
+            <div>
+                <h2>Nueva Sede</h2>
+                <p>Complete la información para registrar una nueva sede.</p>
+            </div>
+            <button class="close-btn-modal" (click)="closeModalSede()">×</button>
+        </div>
+
+        <!-- BODY -->
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Nombre de la Sede</label>
+                <div class="input-box">
+                    <i class="bi bi-building"></i>
+                    <input type="text" placeholder="Ej: nombre de la sede" name="nombre_sede"
+                        [(ngModel)]="sedeForm.sede">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Direccion</label>
+                <div class="input-box">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    <input type="text" placeholder="Ej: Jr. Los Pinos 134, Anta, Cusco" name="direccion_sede"
+                        [(ngModel)]="sedeForm.direccion">
+                </div>
+            </div>
+            <div class="status-box">
+                <div>
+                    <strong>
+                        Estado:
+                        <span [class.active]="isActiveSede" [class.inactive]="!isActiveSede">
+                            {{ isActiveSede ? 'Activo' : 'Inactivo' }}
+                        </span>
+                    </strong>
+                    <p>Habilitar acceso inmediato</p>
+                </div>
+
+                <label class="switch">
+                    <input type="checkbox" [(ngModel)]="isActiveSede">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="modal-footer">
+            <div class="modal-footer-box">
+                <button class="cancel-btn" (click)="closeModalSede()">Cancelar</button>
+                <button class="save-btn" (click)="ActionSede()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL AREA  -->
+<div class="modal-overlay" *ngIf="isModalOpenArea">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+        <!-- HEADER -->
+        <div class="modal-header">
+            <div>
+                <h2>Nueva Area</h2>
+                <p>Complete la información para registrar una nueva area.</p>
+            </div>
+            <button class="close-btn-modal" (click)="closeModalArea()">×</button>
+        </div>
+
+        <!-- BODY -->
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Area</label>
+                <div class="input-box">
+                    <i class="bi bi-building"></i>
+                    <input type="text" placeholder="Ej: Administración" name="nombre_area" [(ngModel)]="areaForm.area">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Referencia</label>
+                <div class="input-box">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    <input type="text" placeholder="Ej: 4to piso a lado del ascensor" name="referencia"
+                        [(ngModel)]="areaForm.referencia">
+                </div>
+            </div>
+            <div class="status-box">
+                <div>
+                    <strong>
+                        Estado:
+                        <span [class.active]="isActiveArea" [class.inactive]="!isActiveArea">
+                            {{ isActiveArea ? 'Activo' : 'Inactivo' }}
+                        </span>
+                    </strong>
+                    <p>Habilitar acceso inmediato</p>
+                </div>
+
+                <label class="switch">
+                    <input type="checkbox" [(ngModel)]="isActiveArea">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="modal-footer">
+            <div class="modal-footer-box">
+                <button class="cancel-btn" (click)="closeModalArea()">Cancelar</button>
+                <button class="save-btn" (click)="ActionArea()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,112 @@
+<div class="container">
+    <div class="panel-solicitud">
+        <div class="modal">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <div>
+                    <h2>Formulario de Solicitud</h2>
+                    <p>Complete el formulario para procesar su requerimiento</p>
+                </div>
+
+                <!-- <button class="close-btn" >×</button> -->
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <!-- SECTION -->
+
+                <div class="form-group">
+                    <label>SEDE</label>
+                    <div class="search-container-out">
+                        <select [(ngModel)]="idSedeSeleccionada" (change)="onSedeChange()">
+                            <option [ngValue]="null" disabled selected>Seleccione Sede...</option>
+                            <option *ngFor="let sede of listSedes" [value]="sede.id_sede">
+                                {{ sede.sede }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>INSTANCIA / AREA</label>
+                    <div class="search-container-out">
+                        <select  [(ngModel)]="idAreaSeleccionada">
+                            <option [ngValue]="null" disabled selected>Seleccione Instancia / Area...</option>
+                            <option *ngFor="let area of listAreasFilter" [value]="area.id_area">
+                                {{ area.area }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>MARCA</label>
+                        <div class="search-container-out">
+                            <select [(ngModel)]="idMarcaSeleccionada" (change)="onModeloChange()">
+                                <option [value]="null" disabled selected>Seleccione Marca de equipo</option>
+                                <option *ngFor="let item of listImpresoras" [value]="item.id_marca">
+                                    {{ item.marca }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>MODELO</label>
+                        <div class="search-container-out">
+                            <select [(ngModel)]="idModeloSeleccionada">
+                                <option [value]="null" disabled selected>Seleccione modelo</option>
+                                <option *ngFor="let item of listModelosFilter" [value]="item.id_modelo">
+                                    {{ item.modelo }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- SECTION -->
+
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>TIPO DE CONSUMIBLE</label>
+                        <div class="search-container-out">
+                            <select [(ngModel)]="idTipoConsumibleSeleccionada">
+                                <option [value]="null" disabled selected>Seleccione tipo de componente</option>
+                                <option *ngFor="let item of listTiposConsumibles" [value]="item.id_tipo_consumible">
+                                    {{ item.tipo_consumible }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>DIRECCION IP</label>
+                        <div class="input-box">
+                            <i class="bi bi-hdd-network-fill"></i>
+                            <input type="text" mask="099.099.099.099" [dropSpecialCharacters]="false" placeholder="Ej. 172.17.10.34" [(ngModel)]="ipSeleccionado">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Motivo / detalle / Descripción del problema</label>
+                    <div class="input-box">
+                        <input type="text" placeholder="Ej: el toner esta bajo" [(ngModel)]="descripcion">
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+                <button class="save-btn" style="width: 100%;" (click)="CreateTicket()">Enviar Solicitud</button>
+                <button class="cancel-btn" (click)="cancelTicket()">Cancelar</button>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>

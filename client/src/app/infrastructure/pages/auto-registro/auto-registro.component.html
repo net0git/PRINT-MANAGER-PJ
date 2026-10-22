@@ -1,0 +1,311 @@
+<div class="registration-page">
+  <header class="top-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H9v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+            </path>
+          </svg>
+        </div>
+
+        <div class="brand-text">
+          <h1>PrintManager</h1>
+          <p>Portal de Gestión de Componentes</p>
+        </div>
+      </div>
+
+      <a href="#"  class="back-home"  (click)=" volver" >
+        <i class="bi bi-arrow-left-circle" style=" font-size: 1rem;"></i>
+        <!-- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
+          </path>
+        </svg> -->
+        <span>Volver al Login</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="form-container">
+
+      <div class="card">
+
+        @if (!isSuccess()) {
+
+        <div class="fade-in">
+
+          <div class="form-header">
+            <div class="user-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z">
+                </path>
+              </svg>
+            </div>
+
+            <h2>Registro de Usuario</h2>
+
+            <p>
+              Completa la información personal y asigna el rol correspondiente
+              para dar de alta un nuevo usuario en la plataforma.
+            </p>
+          </div>
+
+          @if (generalError()) {
+          <div class="general-error">
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clip-rule="evenodd">
+              </path>
+            </svg>
+
+            <span>{{ generalError() }}</span>
+          </div>
+          }
+
+          <form (submit)="handleRegister($event)" class="registration-form" novalidate>
+
+            <div class="fields-grid three-columns">
+
+              <div class="form-group">
+                <label for="nombre">
+                  Nombre <span>*</span>
+                </label>
+
+                <input type="text" id="nombre" [value]="formData().nombre" (input)="updateFormField('nombre', $event)"
+                  placeholder="Ej. Carlos" appSoloLetras>
+              </div>
+
+              <div class="form-group">
+                <label for="apellidoPaterno">
+                  Ap. Paterno <span>*</span>
+                </label>
+
+                <input type="text" id="apellidoPaterno" [value]="formData().ap_paterno"
+                  (input)="updateFormField('ap_paterno', $event)" placeholder="Ej. Mendoza" appSoloLetras>
+              </div>
+
+              <div class="form-group">
+                <label for="apellidoMaterno">
+                  Ap. Materno <span>*</span>
+                </label>
+
+                <input type="text" id="apellidoMaterno" [value]="formData().ap_materno"
+                  (input)="updateFormField('ap_materno', $event)" placeholder="Ej. Vargas">
+              </div>
+
+            </div>
+
+            <div class="fields-grid three-columns">
+
+              <div class="form-group">
+                <label for="correo">
+                  Correo Electrónico <span>*</span>
+                </label>
+
+                <div class="input-wrapper">
+                  <i class="bi bi-envelope input-icon" style=" font-size: 1.1rem;"></i>
+                  <input type="email" id="correo" [value]="formData().correo"
+                    (input)="updateFormField('correo', $event)" placeholder="usuario@dominio.com">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="Telefono">
+                  Telefono <span>*</span>
+                </label>
+
+                <div class="input-wrapper">
+                  <i class="bi bi-telephone input-icon" style=" font-size: 1.1rem;"></i>
+                  <input type="text" id="telefono" [value]="formData().telefono"
+                    (input)="updateFormField('telefono', $event)" placeholder="984..." maxlength="9" appSoloNumeros>
+                </div>
+              </div>
+
+
+
+              <div class="form-group">
+                <label for="rol">
+                  Rol asignado <span>*</span>
+                </label>
+
+                <div class="select-wrapper">
+                  <i class="bi bi-person-circle input-icon" style=" font-size: 1.1rem;"></i>
+                  <!-- <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                    </path>
+                  </svg> -->
+
+
+                  <select id="rol" [value]="formData().id_rol" (change)="updateFormField('id_rol', $event)">
+                    <option value="0" disabled>Seleccione un rol...</option>
+                    <option *ngFor="let item of rolList()" [value]="item.id_rol">
+                      {{ item.rol }}
+                    </option>
+                  </select>
+
+                  <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                    </path>
+                  </svg>
+
+                </div>
+              </div>
+
+            </div>
+
+            <div class="submit-container">
+              <button type="submit" class="register-button" [disabled]="isLoading()">
+
+                @if (isLoading()) {
+
+                <span>Procesando registro...</span>
+
+                <svg class="spinner" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                  </circle>
+
+                  <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z">
+                  </path>
+                </svg>
+
+                } @else {
+
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z">
+                  </path>
+                </svg>
+
+                <span>Registrar Usuario</span>
+
+                }
+
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+
+        } @else {
+
+        <div class="fade-in">
+
+          <div class="success-header">
+
+            <div class="success-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7">
+                </path>
+              </svg>
+            </div>
+
+            <h3>¡Usuario Registrado Con Éxito!</h3>
+
+            <p>
+              El nuevo usuario ha sido dado de alta en el sistema PrintManager.
+            </p>
+
+          </div>
+
+          <div class="registered-card">
+
+            <div class="detail-row">
+              <span>Nombre Completo:</span>
+
+              <strong>
+                {{ registeredUser()?.nombre }}
+                {{ registeredUser()?.ap_paterno }}
+                {{ registeredUser()?.ap_materno }}
+              </strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Correo Electrónico:</span>
+
+              <strong class="email-value">
+                {{ registeredUser()?.correo }}
+              </strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Rol Asignado:</span>
+              <span>{{ rolSeleccionado() }}</span>
+            </div>
+
+            <div class="detail-row">
+              <span>Nombre de Usuario:</span>
+
+              <code class="username-badge">
+                  {{ generatedUsername() }}
+                </code>
+            </div>
+
+            <div class="password-section">
+
+              <span class="password-label">
+                Contraseña Inicial Asignada:
+              </span>
+
+              <div class="password-display">
+
+                <code>{{ generatedPassword() }}</code>
+
+                <button type="button" class="copy-button" (click)="copyPassword()" title="Copiar contraseña">
+
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+                    </path>
+                  </svg>
+
+                  <span>
+                    {{ isCopied() ? '¡Copiado!' : 'Copiar' }}
+                  </span>
+
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="success-actions">
+
+            <button type="button" class="new-user-button" (click)="resetForm()">
+
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
+                </path>
+              </svg>
+
+              <span>Registrar otro usuario</span>
+
+            </button>
+
+            <a href="#" class="users-list-button" (click)="$event.preventDefault()">
+              Ir al Listado de Usuarios
+            </a>
+
+          </div>
+
+        </div>
+
+        }
+
+      </div>
+
+      <p class="footer">
+        &copy; 2026 V1.0.0 PrintManager Gestion de Componentes de la Corte Superior de Justicia de Cusco. Todos los derechos reservados.
+      </p>
+
+    </div>
+  </main>
+</div>

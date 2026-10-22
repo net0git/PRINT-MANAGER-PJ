@@ -1,0 +1,326 @@
+<div class="container">
+    <section>
+        <div class="header-page-dashboard mb-4">
+            <div class="header-page-text-dashboard">
+                <div style="display: flex; align-items: center;">
+                    <div class="circle-blue">
+
+                    </div>
+                    <label>1.Datos Generales</label>
+                </div>
+
+                <span>
+                    Resumen general de los estados y consumibles solicitados.
+                </span>
+            </div>
+            <div>
+                <select class="selector-anio" [(ngModel)]="anioSelected" (ngModelChange)="cambiarAnio($event)">
+                    <option *ngFor="let anio of listAnios" [value]="anio.anio">
+                        {{ anio.anio }}
+                    </option>
+                </select>
+            </div>
+            <!-- <div>
+                <select [(ngModel)]="anioSelected" (ngModelChange)="cambiarAnio($event)">
+                    <option *ngFor="let anio of listAnios" [value]="anio.anio">
+                        {{ anio.anio }}
+                    </option>
+                </select>
+            </div> -->
+        </div>
+
+        <div class="printer-container mb-4">
+            <div class="printer-card">
+                <div class="marcador-box">
+                    <i class="bi bi-journal-text marcador-icon marcador-color-solicitudes"></i>
+                    <div class="marcador-text">
+                        <h4>Total Solicitudes</h4>
+                        <p>{{totalSolicitudes}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="printer-card">
+                <div class="marcador-box">
+                    <i class="bi bi-shield-check marcador-icon marcador-color-pendientes"></i>
+                    <div class="marcador-text">
+                        <h4>Pendientes en TI</h4>
+                        <p>{{totalPendentes}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="printer-card">
+                <div class="marcador-box">
+                    <i class="bi bi-box-seam marcador-icon marcador-color-almacen"></i>
+                    <div class="marcador-text">
+                        <h4>En Almacén</h4>
+                        <p>{{totalAlmacen}}</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="printer-card">
+                <div class="marcador-box">
+                    <i class="bi bi-check2-circle marcador-icon marcador-color-finalizados"></i>
+                    <div class="marcador-text">
+                        <h4>Finalizados</h4>
+                        <p>{{totalFinalizados}}</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="grafig-container ">
+            <div class="dashboard-card">
+                <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
+                    [title]="chartOptions.title" [plotOptions]="chartOptions.plotOptions">
+                </apx-chart>
+            </div>
+            <div class="dashboard-card">
+                <apx-chart [series]="donutChartOptions.series" [chart]="donutChartOptions.chart"
+                    [labels]="donutChartOptions.labels" [title]="donutChartOptions.title"
+                    [legend]="donutChartOptions.legend" [dataLabels]="donutChartOptions.dataLabels"
+                    [plotOptions]="donutChartOptions.plotOptions" [responsive]="donutChartOptions.responsive">
+                </apx-chart>
+            </div>
+
+        </div>
+
+    </section>
+
+    <br>
+
+    <section>
+
+        <div class="header-page-dashboard mb-4">
+            <div class="header-page-text-dashboard">
+                <div style="display: flex; align-items: center;">
+                    <div class="circle-blue">
+
+                    </div>
+                    <label>2.Cantidad de consumibles por Area solicitante</label>
+                </div>
+
+                <span>
+                    Lista y desglose detallado de requerimientos solicitados por cada departamento en la empresa.
+                </span>
+            </div>
+            <div>
+                <label class="anio-lebel">{{anioSelected}}</label>
+            </div>
+
+
+        </div>
+
+        <div class="dashboard-card mb-4">
+            <div class="flex justify-between aling-center">
+                <div class="flex gap-4 aling-center">
+                    <i class="bi bi-funnel-fill filter-icon"></i>
+                    <label for="" class="filter-label">Filtros: </label>
+
+                    <div class="select-small">
+                        <select [(ngModel)]="sedeSeleccionada" (change)="cambiarSede()">
+
+                            <option value="">
+                                Todas las sedes
+                            </option>
+
+                            <option *ngFor="let sede of sedes" [value]="sede">
+                                {{ sede }}
+                            </option>
+
+                        </select>
+                    </div>
+
+                    <div class="select-small">
+                        <select [(ngModel)]="areaSeleccionada" (change)="cambiarArea()">
+
+                            <option value="">
+                                Todas las áreas
+                            </option>
+
+                            <option *ngFor="let area of areas" [value]="area">
+                                {{ area }}
+                            </option>
+
+                        </select>
+                    </div>
+
+                    <div class="select-small">
+                        <select [(ngModel)]="tipoSeleccionado" (change)="cambiarTipo()">
+
+                            <option value="">
+                                Todos los tipos
+                            </option>
+
+                            <option *ngFor="let tipo of tipos" [value]="tipo">
+                                {{ tipo }}
+                            </option>
+
+                        </select>
+                        
+                    </div>
+                </div>
+
+                <div>
+                    <button type="button" (click)="limpiarFiltros()" class="filter-button">
+                        <i class="bi bi-arrow-repeat"></i>
+                        Limpiar filtros
+                    </button>
+                    <button class="download-btn" (click)="exportToExcel()"><i class="bi bi-download"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-card">
+            <div class="titulo">
+                MATRIZ CRUZADA: ÁREA VS. NRO. DE PARTE CONSUMIBLE
+            </div>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th class="col-area">
+                            Área / Consumible
+                        </th>
+
+                        <th *ngFor="let columna of columnas">
+                            {{ columna }}
+                        </th>
+
+                        <th class="total">
+                            Total
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr *ngFor="let fila of datos">
+
+                        <td class="area">
+
+                            <div class="nombre">
+                                {{ fila.area }}
+                            </div>
+
+                            <div class="sede">
+                                {{ fila.sede }}
+                            </div>
+
+                        </td>
+
+                        <td *ngFor="let valor of fila.valores" [class.vacio]="valor === null"
+                            style="text-align: center;">
+
+                            {{ valor ?? '-' }}
+
+                        </td>
+
+                        <td class="total" style="text-align: center; background-color: rgba(240, 243, 243, 0.205);">
+                            {{ fila.total }}
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </section>
+
+    <br>
+
+    <section>
+        <div class="header-page-dashboard mb-4">
+            <div class="header-page-text-dashboard">
+                <div style="display: flex; align-items: center;">
+                    <div class="circle-blue">
+
+                    </div>
+                    <label>3.Cantidad de consumibles solicitados por Nro de parte</label>
+                </div>
+
+                <span>
+                    Cantidad de consumibles solicitados por Nro de parte, agrupados por tipo de consumible y sede.
+                </span>
+            </div>
+            <div>
+                <label class="anio-lebel">{{anioSelected}}</label>
+            </div>
+        </div>
+
+        <div class="dashboard-card mb-4">
+            <div class="flex justify-between">
+                <div class="search-container-in">
+                    <span class="search-icon"><i class="bi bi-search"></i></span>
+                    <input type="text" placeholder="Buscar por marcas, modelos o codigos de insumos..."
+                        (input)="buscarEnObjeto($event)">
+                </div>
+                <div class="header-info"
+                    *ngIf="nroParteCantTemp.length == nroParteCant.length ; else resultadoBusqueda">
+                    <span class="table-indicator"> Mostrando todos los consumibles</span>
+                    <button class="download-btn" (click)="exportToExcelNroParte()"><i
+                            class="bi bi-download"></i></button>
+                </div>
+                <ng-template #resultadoBusqueda>
+                    <div class="header-info">
+                        <span class="table-indicator">
+                            Mostrando {{ nroParteCant.length }} de {{ nroParteCantTemp.length }} consumibles
+                        </span>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="titulo">
+                CONSUMIBLES MÁS UTILIZADOS
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nro de Parte</th>
+                        <th>Tipo de Consumible</th>
+                        <th>Cantidad</th>
+                        <th>Porcentaje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let fila of nroParteCant">
+                        <td class="area">
+                            <div class="nombre">
+                                {{ fila.nro_parte }}
+                            </div>
+
+                            <div class="sede">
+                                {{ fila.marca }}
+                            </div>
+                        </td>
+                        <td class="data-simple">
+                            {{ fila.tipo_consumible }}
+                        </td>
+                        <td class="data-simple">
+                            {{ fila.cantidad }}
+                        </td>
+                        <td class="porcentaje">
+
+                            <div class="progress-container">
+
+                                <div class="progress">
+                                    <div class="progress-bar" [style.width.%]="fila.porcentaje">
+                                    </div>
+                                </div>
+
+                                <span>{{ fila.porcentaje | number:'1.2-2' }}%</span>
+
+                            </div>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
