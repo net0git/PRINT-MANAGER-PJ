@@ -1,35 +1,27 @@
-# Dependencies
-node_modules/
-**/node_modules/
+# SQL files - database backups should not be in repo
+*.sql
 
-# Build / Compiled output
-dist/
-**/dist/
-out-tsc/
-**/out-tsc/
-.angular/
-**/.angular/
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Log files
 *.log
 
 # Environment variables
-.env
-.env.*
-**/.env
-**/.env.*
+*.env
+.env.local
 
-# IDEs and editors
+# Dependencies
+node_modules/
+/.pnpm-lock.yaml
+/yarn-lock.yaml
+/pnpm-debug.log
+
+# IDE files
+.vscode/
 .idea/
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+*.code-workspace
 
-# OS generated files
+# Build outputs
+dist/
+build/
+
+# OS files
 .DS_Store
-Thumbs.db
