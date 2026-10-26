@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { UserUseCasesService } from '../../../useCase/user/user-use-cases.service';
 import { firstValueFrom } from 'rxjs';
 import { UserService } from '../../../infrastructure/services/remoto/user/user.service';
@@ -7,7 +6,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reset-cuenta',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './reset-cuenta.component.html',
   styleUrl: './reset-cuenta.component.scss'
 })

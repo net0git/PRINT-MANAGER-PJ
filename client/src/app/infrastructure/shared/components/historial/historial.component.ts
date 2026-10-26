@@ -13,6 +13,8 @@ import { NotificationService } from '../../../services/local/notification.servic
 })
 export class HistorialComponent implements OnInit {
 
+  // Object literals with unique keys to avoid duplicate-key warning
+
   historialTickets: TicketDetailHistorialResponse[] = []
   historialTicketsTemp: TicketDetailHistorialResponse[] = []
   constructor(private ticketService: TicketService, private localStorageUsuarioService: LocalStorageUsuarioService, private notificationService: NotificationService) { }
