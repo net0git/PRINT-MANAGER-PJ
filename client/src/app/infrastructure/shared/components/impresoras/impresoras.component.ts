@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { RoutesEnum } from '../../../core/enum/routes.enum';
@@ -49,6 +49,7 @@ export class ImpresorasComponent implements OnInit {
   isModalOpenModelo = false;
   isActiveModelo = true;
   isModalOpenConsumible = false;
+  menuAbiertoModeloId: number | null = null;
   listImpresoras: ImpresoraDetailResponse[] = [];
   listConsumibles: ConsumibleResponse[] = [];
   listImpresorasTemp: ImpresoraDetailResponse[] = [];
@@ -605,5 +606,15 @@ export class ImpresorasComponent implements OnInit {
         return totalModelos + (modelo.consumibles?.length || 0);
       }, 0);
     }, 0);
+  }
+
+  toggleMenuModelo(idModelo: number, event: Event): void {
+    event.stopPropagation();
+    this.menuAbiertoModeloId = this.menuAbiertoModeloId === idModelo ? null : idModelo;
+  }
+
+  @HostListener('document:click')
+  cerrarMenuModelo(): void {
+    this.menuAbiertoModeloId = null;
   }
 }

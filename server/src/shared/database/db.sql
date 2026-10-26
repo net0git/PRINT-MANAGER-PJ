@@ -60,7 +60,7 @@ CREATE TABLE area (
 
     id_area        SERIAL PRIMARY KEY,
     created_at     TIMESTAMP,
-    area           VARCHAR(150),
+    area           VARCHAR(250),
     referencia     VARCHAR(150),
     id_sede        INTEGER,
     estado         BOOLEAN
@@ -938,12 +938,11 @@ VALUES
     ('Cartucho de tinta (cian)', NOW(),NOW(), 'I', 'postgres', 'ADMIN', NULL, '127.0.0.1', NULL),
     ('Contenedor de Tóner Residual', NOW(),NOW(), 'I', 'postgres', 'ADMIN', NULL, '127.0.0.1', NULL);
 
-BEGIN;
 
 -- ============================================================
 -- SEDES DEL PODER JUDICIAL - CORTE SUPERIOR DE JUSTICIA DE CUSCO
 -- ============================================================
-
+BEGIN;
 INSERT INTO sede (
     created_at,
     sede,

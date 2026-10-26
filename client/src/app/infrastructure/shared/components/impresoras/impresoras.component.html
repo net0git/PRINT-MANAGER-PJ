@@ -213,18 +213,45 @@
                 </div>
 
                 <div class="actions">
-                    <span class="status" [ngClass]="modelo.estado ? 'active-status' : 'inactive-status'">
-                        {{ modelo.estado ? 'ACTIVO' : 'INACTIVO' }}
+                    <span class="status status-model" [ngClass]="modelo.estado ? 'active-status' : 'inactive-status'"
+                        [title]="modelo.estado ? 'Activo' : 'Inactivo'">
+                        <span class="status-text">{{ modelo.estado ? 'ACTIVO' : 'INACTIVO' }}</span>
                     </span>
-                    <div title="modificar modelo">
-                        <i class="bi bi-pencil-fill icon-edit-model"
-                            (click)="openModalModeloUpdate(marca.id_marca, modelo)"></i>
+                    <div class="actions-inline">
+                        <div title="modificar modelo">
+                            <i class="bi bi-pencil-fill icon-edit-model"
+                                (click)="openModalModeloUpdate(marca.id_marca, modelo)"></i>
+                        </div>
+                        <div title="eliminar modelo">
+                            <i class="bi bi-trash-fill icon-delete-model"></i>
+                        </div>
+                        <div title="agregar consumible" (click)="openModalConsumibleCreate(marca, modelo)">
+                            <i class="bi bi-droplet-half icon-edit-model">+</i>
+                        </div>
                     </div>
-                    <div title="eliminar modelo">
-                        <i class="bi bi-trash-fill icon-delete-model"></i>
-                    </div>
-                    <div title="agregar consumible" (click)="openModalConsumibleCreate(marca, modelo)">
-                        <i class="bi bi-droplet-half icon-edit-model">+</i>
+
+                    <div class="actions-menu-container">
+                        <div title="opciones" (click)="toggleMenuModelo(modelo.id_modelo, $event)">
+                            <i class="bi bi-three-dots-vertical icon-edit-model"></i>
+                        </div>
+                        <div class="actions-dropdown" *ngIf="menuAbiertoModeloId === modelo.id_modelo"
+                            (click)="$event.stopPropagation()">
+                            <button type="button" class="dropdown-action-item" title="modificar modelo"
+                                (click)="openModalModeloUpdate(marca.id_marca, modelo); cerrarMenuModelo()">
+                                <i class="bi bi-pencil-fill icon-edit-model"></i>
+                                <span>Modificar modelo</span>
+                            </button>
+                            <button type="button" class="dropdown-action-item" title="eliminar modelo"
+                                (click)="cerrarMenuModelo()">
+                                <i class="bi bi-trash-fill icon-delete-model"></i>
+                                <span>Eliminar modelo</span>
+                            </button>
+                            <button type="button" class="dropdown-action-item" title="agregar consumible"
+                                (click)="openModalConsumibleCreate(marca, modelo); cerrarMenuModelo()">
+                                <i class="bi bi-droplet-half icon-edit-model">+</i>
+                                <span>Agregar consumible</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 

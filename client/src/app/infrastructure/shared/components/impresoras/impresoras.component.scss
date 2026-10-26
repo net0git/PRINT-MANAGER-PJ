@@ -122,7 +122,7 @@
   background: #fff;
   border: 1px solid #e8edf4;
   border-radius: 16px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .brand-card:hover {
@@ -211,7 +211,7 @@
 
 .model-row {
   display: grid;
-  grid-template-columns: 300px 1fr auto auto;
+  grid-template-columns: minmax(180px, 260px) minmax(0, 1fr) auto;
   gap: 20px;
   align-items: center;
   padding: 18px 24px;
@@ -232,7 +232,9 @@
     color: #1925358e;
   }
   .consumable-card {
-  min-width: 260px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
   background: #ffffff;
   border: 2px solid #ddebf8;
   border-radius: 12px;
@@ -319,7 +321,9 @@
 }
 
 .consumable-card {
-  min-width: 260px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
   background: #f8fafc80;
   border: 2px solid #edf2f7;
   border-radius: 12px;
@@ -479,7 +483,98 @@
 
 .actions {
   display: flex;
+  align-items: center;
+  justify-self: end;
+  flex-shrink: 0;
   gap: 10px;
+}
+
+.actions-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.actions-menu-container {
+  display: none;
+  position: relative;
+}
+
+.actions-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+  padding: 6px;
+  min-width: 185px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dropdown-action-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: #f1f5f9;
+  }
+
+  .icon-edit-model,
+  .icon-delete-model {
+    padding: 0;
+    border: none;
+    background: transparent;
+  }
+}
+
+@media (max-width: 1024px) {
+  .status-model {
+    width: 10px;
+    height: 10px;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    display: inline-block;
+    margin-right: 4px;
+
+    .status-text {
+      display: none;
+    }
+
+    &.active-status {
+      background-color: #059669;
+      border-color: #059669;
+    }
+
+    &.inactive-status {
+      background-color: #e53e3e;
+      border-color: #e53e3e;
+    }
+  }
+
+  .actions-inline {
+    display: none;
+  }
+
+  .actions-menu-container {
+    display: block;
+  }
 }
 
 .action-btn-model {
@@ -516,7 +611,8 @@
 
 .consumables {
   display: grid;
-  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  min-width: 0;
   gap: 12px;
 }
 
