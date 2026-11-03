@@ -1,5 +1,13 @@
 # Print Manager
 
+![Print Manager Logo](images/logo1.png)
+
+![Interfaz Principal](images/logo2.png)
+
+**Credenciales de inicio de sesión:**
+- **Usuario:** `admin`
+- **Contraseña:** `123456`
+
 Sistema de gestión de impresión para control de impresoras, consumibles, tickets y reportes.
 
 ## Descripción
