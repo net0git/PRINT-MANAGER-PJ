@@ -1,0 +1,248 @@
+<div class="header-page">
+    <div class="header-page-text">
+
+        <label (click)="volver()"> <i class="bi bi-arrow-left header-page-icon-left"></i> Ajustes de Suministros y
+            Equipos</label>
+        <span>
+            Gestione los catálogos base de tipos de consumibles, suministros codificados e infraestructura de tipos de
+            equipos.
+        </span>
+    </div>
+</div>
+<br>
+<div class="catalog-container">
+
+    <!-- MARCAS -->
+    <div class="panel">
+
+        <div class="header">
+            <span> 1. Marcas</span>
+            <button (click)="toggleFormulario('marcas')">+ Agregar</button>
+        </div>
+
+        <div class="slide-panel" [class.open]="mostrarFormulario.marcas">
+
+            <div class="form-card">
+                <label class="form-tittle">Nombre de Marca</label>
+                <div class="search-container-out">
+                    <input type="text" placeholder="" [(ngModel)]="marcaForm.marca">
+                </div>
+                <div class="form-actions">
+                    <button class="btn-cancel" (click)="toggleFormulario('marcas')">
+                        Cancelar
+                    </button>
+                    <button class="btn-save" (click)="actionMarca()">
+                        Agregar
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="list scroll" *ngIf="marcas.length > 0">
+            <div class="card vertical" *ngFor="let item of marcas">
+                <div class="left">
+                    <span class="dot">
+                    </span>
+                    {{ item.marca }}
+                </div>
+                <div class="actions">
+                    <i class="bi bi-pencil" (click)="abrirFormularioMarcaUpdate(item)"></i>
+                    <!-- <i class="bi bi-trash"></i> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- TIPOS CONSUMIBLE -->
+    <div class="panel">
+
+        <div class="header">
+            <span> 2. Tipos de Consumible</span>
+            <button (click)="toggleFormulario('tiposConsumible')">+ Agregar</button>
+        </div>
+
+        <div class="slide-panel" [class.open]="mostrarFormulario.tiposConsumible">
+
+            <div class="form-card">
+                <label class="form-tittle">Nombre de Tipo de Consumible</label>
+                <div class="search-container-out">
+                    <input type="text" placeholder="" name="tipo-consumible"
+                        [(ngModel)]="tipoConsumibleForm.tipo_consumible">
+                </div>
+                <div class="form-actions">
+                    <button class="btn-cancel" (click)="toggleFormulario('tiposConsumible')">
+                        Cancelar
+                    </button>
+                    <button class="btn-save" (click)="actionTipoConsumible()">
+                        Agregar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="list scroll">
+            <div class="card" *ngFor="let item of tiposConsumible">
+                <div class="left">
+                    <span class="dot"></span>
+                    {{ item.tipo_consumible }}
+                </div>
+                <div class="actions">
+                    <i class="bi bi-pencil" (click)="abrirFormularioTipoConsumibleUpdate(item)"></i>
+                    <!-- <i class="bi bi-trash"></i> -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- TIPOS EQUIPO -->
+    <div class="panel">
+
+        <div class="header">
+            <span>3. Tipos de Equipo</span>
+            <button (click)="toggleFormulario('tiposEquipo')">+ Agregar</button>
+        </div>
+
+        <div class="slide-panel" [class.open]="mostrarFormulario.tiposEquipo">
+
+            <div class="form-card">
+                <label class="form-tittle">Nombre de Tipo de Equipo</label>
+                <div class="search-container-out">
+                    <input type="text" placeholder="" name="tipo-equipo" [(ngModel)]="tipoEquipoForm.tipo_equipo">
+                </div>
+                <label class="form-tittle">Descripción</label>
+                <div class="search-container-out">
+                    <input type="text" placeholder="" name="descripcion" [(ngModel)]="tipoEquipoForm.descripcion">
+                </div>
+                <div class="form-actions">
+                    <button class="btn-cancel" (click)="toggleFormulario('tiposEquipo')">
+                        Cancelar
+                    </button>
+                    <button class="btn-save" (click)="actionTipoEquipo()">
+                        Agregar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="list scroll">
+            <div class="card vertical" *ngFor="let item of tiposEquipo">
+                <div>
+                    <div class="title">
+                        {{ item.tipo_equipo }}
+                    </div>
+                    <small>
+                        {{ item.descripcion }}
+                    </small>
+                </div>
+                <div class="actions">
+                    <i class="bi bi-pencil" (click)="abrirFormularioTipoEquipoUpdate(item)"></i>
+                    <!-- <i class="bi bi-trash"></i> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONSUMIBLES -->
+    <div class="panel">
+
+        <div class="header">
+            <span>4. Consumibles</span>
+            <button (click)="toggleFormulario('consumibles')">+ Agregar</button>
+        </div>
+
+        <div class="slide-panel" [class.open]="mostrarFormulario.consumibles">
+
+            <div class="form-card">
+
+                <div>
+                    <label class="form-tittle">Nro de Parte</label>
+                    <div class="search-container-out">
+                        <input type="text" placeholder="" name="nro_parte" [(ngModel)]="consumibleForm.nro_parte">
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div>
+                        <label class="form-tittle">Marca</label>
+                        <div class="search-container-out">
+                            <select [(ngModel)]="consumibleForm.id_marca">
+                                <option [value]="0" disabled selected>Seleccione marca...</option>
+                                <option *ngFor="let item of marcas" [value]="item.id_marca">
+                                    {{ item.marca }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-tittle">Tipo de Consumible</label>
+                        <div class="search-container-out">
+                            <select [(ngModel)]="consumibleForm.id_tipo_consumible">
+                                <option [value]="0" disabled selected>Seleccione tipo consumible...</option>
+                                <option *ngFor="let item of tiposConsumible" [value]="item.id_tipo_consumible">
+                                    {{ item.tipo_consumible }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- <div>
+                        <label class="form-tittle">Tipo de Equipo</label>
+                        <div class="search-container-out">
+                            <select [(ngModel)]="consumibleForm.id_tipo_equipo">
+                                <option [value]="0" disabled selected>Seleccione equipo...</option>
+                                <option *ngFor="let item of tiposEquipo" [value]="item.id_tipo_equipo">
+                                    {{ item.tipo_equipo }}
+                                </option>
+                            </select>
+                        </div>
+                    </div> -->
+                </div>
+
+
+
+                <div class="form-actions">
+                    <button class="btn-cancel" (click)="toggleFormulario('consumibles')">
+                        Cancelar
+                    </button>
+                    <button class="btn-save" (click)="actionConsumible()">
+                        Agregar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- <input class="search" placeholder="Buscar suministro"> -->
+        <div class="search-container-in">
+            <span class="search-icon"><i class="bi bi-search"></i></span>
+            <input type="text" (input)=" buscarEnObjeto($event)" placeholder="Buscar por codigo o categoria...">
+        </div>
+        <br>
+
+        <div class="list scroll">
+            <div class="card vertical" *ngFor="let item of consumibles">
+                <div>
+                    <div class="title">
+                        {{ item.nro_parte }}
+                        <!-- <span class="code">
+                            {{ item.codigo }}
+                        </span> -->
+                    </div>
+                    <span class="tag">
+                        {{ item.tipoConsumible.tipo_consumible }}
+
+                    </span>
+                    <span class="tag">
+                        {{ item.marca.marca }}
+                    </span>
+                    <!-- <span class="tag">
+                        {{ item.tipoEquipo.tipo_equipo }}
+                    </span> -->
+                </div>
+                <div class="actions">
+                    <i class="bi bi-pencil" (click)="abrirFormularioConsumibleUpdate(item)"></i>
+                    <!-- <i class="bi bi-trash"></i> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

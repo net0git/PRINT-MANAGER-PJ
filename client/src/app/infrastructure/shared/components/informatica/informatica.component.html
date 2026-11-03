@@ -1,0 +1,338 @@
+<div class="container-table">
+    <div class="table-header">
+        <div class="box-search">
+            <div class="search-container-in">
+                <span class="search-icon"><i class="bi bi-search"></i></span>
+                <input type="text" placeholder="Buscar por marca, modelo, consumible o usuario..."
+                    (input)="buscarEnObjeto($event)">
+            </div>
+            <div class="header-info"
+                *ngIf="historialTicketsTemp.length == historialTickets.length ; else resultadoBusqueda">
+                <span class="table-indicator"> Mostrando todas las marcas</span>
+            </div>
+            <ng-template #resultadoBusqueda>
+                <div class="header-info">
+                    <span class="table-indicator">
+                        Mostrando {{historialTickets.length}} de {{historialTicketsTemp.length}} Solicitudes
+                    </span>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+
+    <!-- Tabla -->
+    <table>
+        <colgroup>
+            <col style="width:12%">
+            <col style="width:16%">
+            <col style="width:30%">
+            <col style="width:9%">
+            <col style="width:16%">
+            <col style="width:15%">
+            <col style="width:1%">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>ID/ FECHA</th>
+                <th>INFORMACIÓN IMPRESORA</th>
+                <th>AREA</th>
+                <th>CONSUMIBLE</th>
+                <th>USUARIO</th>
+                <th>ESTADO</th>
+                <th>ACCION</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let ticket of historialTickets">
+                <td>
+                    <div class="info-req">
+                        <div class="id_req">{{ ticket.codigo }}</div>
+                        <div class="fecha_req">
+                            <i class="bi bi-clock"></i>
+                            {{ ticket.created_at | date:'yyyy-MM-dd HH:mm' }}
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    <div>
+                        <div>
+                            <strong> {{ ticket.impresora.modelo }}</strong>
+                        </div>
+
+                        <div class="info-print">
+                            <div class="marca_print">
+                                <span class="dot"></span>
+                                {{ ticket.impresora.marca }}
+                            </div>
+                            <div class="ip_print">
+                                IP: {{ ticket.impresora.ip }}
+                            </div>
+
+
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="user-info">
+
+                        <div>
+                            <div class="name">
+                                {{ ticket.area.area }}
+                            </div>
+
+                            <div class="email ">
+                                {{ ticket.area.sede.sede }}
+                            </div>
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    <span class="componente">
+                        {{ ticket.consumible.tipo_consumible }}
+                    </span>
+                </td>
+
+                <td>
+                    <div class="user-info">
+                        <div class="avatar">
+                            {{ ticket.usuario.nombre.charAt(0) }}
+                        </div>
+
+                        <div>
+                            <div class="name">
+                                {{ ticket.usuario.nombre }}
+                            </div>
+
+                            <div class="email">
+                                {{ ticket.usuario.correo }}
+                            </div>
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    <span class="status active-status" [ngClass]="{
+                    'info-status': ticket.estado_general === 'I',
+                    'almcen-status': ticket.estado_general === 'A',
+                    'finish-status': ticket.estado_general === 'F',
+                    'cancel-status': ticket.estado_general === 'R'}">
+                        {{ ticket.estado_general_descripcion }}
+                    </span>
+                </td>
+
+                <td>
+                    <div class="menu-container" #menuContainer>
+
+                        <button class="notice-btn" (click)="toggleMenu($event, ticket.id_ticket)">
+                            <i class="bi bi-three-dots-vertical icon-observar"></i>
+                        </button>
+
+                        <div class="dropdown-menu" *ngIf="menuAbierto === ticket.id_ticket">
+                            <button (click)="detalle(ticket)" class="boton-panel-detalle"><i
+                                    class="bi bi-search icon-observar" style="margin-right: 10px;"></i> Detalle
+                                solicitud</button>
+                            <button [disabled]="ticket.estado_general === 'A' || ticket.estado_general === 'R'"
+                                (click)="aprobarTicket(ticket)" class="boton-panel-aprobar"><i
+                                    class="bi bi-check-circle-fill" style="margin-right: 10px;"></i>Aprobar</button>
+                            <button [disabled]="ticket.estado_general === 'A' || ticket.estado_general === 'R'"
+                                (click)="MenuRechazar(ticket)" class="boton-panel-rechazar"><i
+                                    class="bi bi-x-circle-fill" style="margin-right: 10px;"></i>Rechazar</button>
+                        </div>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+</div>
+
+<div class="empty-state" *ngIf="historialTicketsTemp.length === 0 ">
+    <i class="bi bi-check-circle"></i>
+    <p>A la espera de nuevas solicitudes.</p>
+</div>
+
+<!-- MODAL DETALLE-->
+<div class="modal-overlay" *ngIf="isModalOpenDetalle">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+        <!-- HEADER -->
+        <div class="modal-header">
+            <div class="header-box">
+                <div>
+                    <h2><span class="status detail-status">DETALLE</span>{{dataTicketDetalle?.codigo}}</h2>
+                    <p>Solicitud creada el {{dataTicketDetalle?.created_at | date:'yyyy-MM-dd HH:mm'}}</p>
+                </div>
+                <button class="close-btn" (click)="closeModalDetalle()">×</button>
+            </div>
+
+        </div>
+
+        <!-- BODY -->
+        <div class="modal-body">
+
+            <!-- ESTADO DE VALIDADCION -->
+            <section class="section-status">
+                <p>Estado de validación:</p>
+                <div *ngIf="dataTicketDetalle as ticket">
+                    <span class="status active-status" [ngClass]="{
+                                'info-status': ticket.estado_general === 'I',
+                                'almcen-status': ticket.estado_general === 'A',
+                                'finish-status': ticket.estado_general === 'F',
+                                'cancel-status': ticket.estado_general === 'R'
+                            }">
+                        {{ ticket.estado_general_descripcion }}
+                    </span>
+                </div>
+
+            </section>
+            <!-- SECTION INFORMACION DEL EQUIPO-->
+            <section class="mb-4">
+                <div class="section-title">
+                    <h4>INFORMACIÓN DEL EQUIPO</h4>
+                </div>
+                <div class="info-box">
+                    <div class="flex justify-between">
+                        <p>Modelo:</p>
+                        <h4>{{ dataTicketDetalle?.impresora?.modelo || 'Sin información' }}</h4>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <p>Marca:</p>
+                        <label>{{ dataTicketDetalle?.impresora?.marca || 'Sin información' }}</label>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <p>Dirección IP:</p>
+                        <span style="font-size: 0.8rem; opacity: 0.75;">
+                            {{ dataTicketDetalle?.impresora?.ip || 'Sin información' }}
+                        </span>
+                    </div>
+                </div>
+            </section>
+            <section class="mb-4">
+                <div class="section-title">
+                    <h4>SEDE Y AREA DESTINO</h4>
+                </div>
+                <div class="info-box">
+                    <div class="flex justify-between">
+                        <p for="">Area:</p>
+                        <h4>{{dataTicketDetalle?.area?.area || 'Sin información'}}</h4>
+                    </div>
+                    <div class="flex justify-between">
+                        <p for="">Sede:</p>
+                        <label>{{dataTicketDetalle?.area?.sede?.sede || 'Sin información'}}</label>
+                    </div>
+                </div>
+            </section>
+            <section class="mb-4">
+                <div class="section-title">
+                    <h4>CONSUMIBLE SOLICITADO</h4>
+                </div>
+                <div class="info-box">
+                    <div class="flex justify-between">
+                        <p for="">{{dataTicketDetalle?.consumible?.tipo_consumible}}:</p>
+                        <h4>fecha {{dataTicketDetalle?.created_at | date:'yyyy-MM-dd HH:mm'}}</h4>
+                    </div>
+                    <div class="flex justify-between" *ngIf="dataTicketDetalle?.descripcion !== null">
+                        <p>Detalle:</p>
+                        <label>{{ dataTicketDetalle?.descripcion }}</label>
+                    </div>
+                </div>
+            </section>
+            <section class="mb-4">
+                <div class="section-title">
+                    <h4>USUARIO SOLICITANTE</h4>
+                </div>
+                <div class="user-info">
+                    <div class="avatar">
+                        {{ dataTicketDetalle?.usuario?.nombre?.charAt(0) }}
+                    </div>
+
+                    <div>
+                        <div class="name">
+                            {{dataTicketDetalle?.usuario?.nombre +" "+ dataTicketDetalle?.usuario?.ap_paterno +" "+
+                            dataTicketDetalle?.usuario?.ap_materno}}
+                        </div>
+
+                        <div class="email">
+                            {{dataTicketDetalle?.usuario?.correo}} / {{dataTicketDetalle?.usuario?.telefono}}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <div class="info-box-rechazo" *ngIf="dataTicketDetalle?.estado_general === 'R'">
+                    <h4>MOTIVO DEL RECHAZO:</h4>
+                    <p>{{dataTicketDetalle?.estado?.informatica?.mensaje}}</p>
+                </div>
+            </section>
+
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="modal-footer">
+
+
+
+
+
+            <div *ngIf="dataTicketDetalle?.estado_general ==='I'" class="flex"
+                style="gap: 10px; justify-content: end; margin-right: 10px;">
+                <button class="save-btn-rechazar" (click)="openModalRechazar()">Rechazar</button>
+                <button class="save-btn-aprobar" (click)="aprobarTicket(dataTicketDetalle!)">Aprobar</button>
+            </div>
+            <button class="cancel-btn-small" (click)="closeModalDetalle()">Cerrar</button>
+
+
+        </div>
+
+    </div>
+</div>
+
+<!-- MODAL RECHAZAR-->
+<div class="modal-overlay" *ngIf="isModalOpenRechazar">
+    <div class="modal-rechazar" (click)="$event.stopPropagation()">
+        <!-- HEADER -->
+        <div class="modal-header-rechazar">
+            <div class="header-box">
+                <i class="bi bi-trash icon-info-rechazar"></i>
+                <div>
+                    <h2>Rechazar Requerimiento</h2>
+                    <p>Solicitud REQ-001</p>
+                </div>
+            </div>
+            <button class="close-btn" (click)="closeModalRechazar()">×</button>
+        </div>
+        <!-- BODY -->
+        <div class="modal-body">
+            <div class="info-box-componente">
+                <p>Por favor, indica las razones detalladas por las cuales estás rechazando este requerimiento de
+                    consumible. Esta descripción se guardará en el historial.</p>
+            </div>
+            <br>
+            <div class="section-title mb-2">
+                <h4>MOTIVO DEL RECHAZO *</h4>
+            </div>
+            <div class="input-box ">
+                <!-- <textarea [(ngModel)]="mensajeRechazo" placeholder="Ej: el toner esta bajo"></textarea> -->
+                <input type="text" placeholder="Ej: el toner esta bajo" [(ngModel)]="mensajeRechazo">
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="modal-footer">
+            <button class="cancel-btn-small" (click)="closeModalRechazar()">Cancelar</button>
+            <button class="save-btn-rechazar" [disabled]="!(mensajeRechazo?.trim())"
+                (click)="rechazarTicket(dataTicketDetalle!)">
+                Rechazar solicitud
+            </button>
+        </div>
+
+    </div>
+</div>

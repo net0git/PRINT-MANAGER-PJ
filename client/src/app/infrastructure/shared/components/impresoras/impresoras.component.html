@@ -1,0 +1,438 @@
+<div class="container">
+    <div class="header-page">
+        <div class="header-page-text">
+            <label>Catalogo de Marcas y Modelos de Impresoras</label>
+            <span>
+                Gestione las marcas autorizadas de impresión corporativa y los suministros compatibles para cada modelo
+                de hardware.
+            </span>
+        </div>
+
+        <div class="header-buttons">
+            <button class="button-primary button-primary-shadow" (click)="openModalMarcaCreate()">
+                <i class="bi bi-plus icon-button"></i>
+                Nueva Marca
+            </button>
+            <div (click)="printConfig()">
+                <i class="bi bi-gear icon-edit-catalogo"></i>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="printer-container">
+        <div class="printer-card">
+            <div class="marcador-box">
+                <i class="bi bi-journal-text marcador-icon marcador-color-solicitudes"></i>
+                <div class="marcador-text">
+                    <h4>Marcas Activas</h4>
+                    <p>{{listImpresorasTemp.length}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="printer-card">
+            <div class="marcador-box">
+                <i class="bi bi-shield-check marcador-icon marcador-color-pendientes"></i>
+                <div class="marcador-text">
+                    <h4>Modelos Registrados</h4>
+                    <p>{{ getTotalModelos() }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="printer-card">
+            <div class="marcador-box">
+                <i class="bi bi-box-seam marcador-icon marcador-color-almacen"></i>
+                <div class="marcador-text">
+                    <h4>Suministros vinculados</h4>
+                    <p>{{ getTotalSuministros() }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="search-card">
+        <div class="box-search">
+            <div class="search-container-in">
+                <span class="search-icon"><i class="bi bi-search"></i></span>
+                <input type="text" placeholder="Buscar por marcas, modelos o codigos de insumos..."
+                    (input)="buscarEnObjeto($event)">
+            </div>
+            <div class="header-info"
+                *ngIf="listImpresorasTemp.length == listImpresoras.length ; else resultadoBusqueda">
+                <span class="table-indicator"> Mostrando todas las marcas</span>
+            </div>
+            <ng-template #resultadoBusqueda>
+                <div class="header-info">
+                    <span class="table-indicator">
+                        Mostrando {{ listImpresoras.length }} de {{ listImpresorasTemp.length }} marcas
+                    </span>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+    <br>
+
+    @for (marca of listImpresoras; track marca.marca) {
+
+    <div class="brand-card">
+
+        <div class="brand-header">
+            <div class="brand-info">
+                <i class="bi bi-tags-fill icon-brand-marca"></i>
+                <div class="brand-print-info">
+                    <h2>{{ marca.marca }}</h2>
+                    <p>{{ marca.estado ? 'activo' : 'inactivo' }}</p>
+                </div>
+
+            </div>
+
+            <div class="brand-info">
+                <button class="action-btn-model" (click)="openModalModeloCreate(marca.id_marca)">
+                    <i class="bi bi-plus-circle"></i> Agregar Modelo
+                </button>
+                <i class="bi bi-pencil-fill icon-edit-marca" (click)="openModalMarcaUpdate(marca)"></i>
+            </div>
+
+
+        </div>
+        <div class="title-info-models">
+            <p>modelos</p>
+            <p>consumibles</p>
+            <p>detalles & estados</p>
+        </div>
+
+        <div class="models-container">
+            <div class="empty-models" *ngIf="marca.modelos == null || marca.modelos.length === 0">
+                <i class="bi bi-box-seam"></i>
+                <p>No hay modelos registrados</p>
+                <span>Esta marca todavía no tiene modelos asociados.</span>
+                <label type="button" (click)="openModalModeloCreate(marca.id_marca)">
+                    <i class="bi bi-plus"></i>
+                    Agregar modelo
+                </label>
+            </div>
+
+            @for (modelo of marca.modelos; track modelo.id_modelo) {
+
+
+            <div class="model-row">
+
+
+                <div class="model-info">
+                    <div class="model-icon">
+                        <i class="bi bi-printer-fill"></i>
+                    </div>
+
+                    <div>
+                        <div class="model-name">
+                            {{ modelo.modelo }}
+                        </div>
+                        <div>
+                            <label for="" class="model-caracteristica">{{ modelo.tipo_equipo.tipo_equipo }}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="consumables">
+
+                    @for (consumible of modelo.consumibles; track consumible.id_modelo_consumible) {
+
+                    <div class="consumable-card">
+
+                        <div class="consumable-type">
+
+                            @if (consumible.tipo_consumible.tipo_consumible.toLowerCase().includes('toner')) {
+                            <i class="bi bi-droplet-fill icon-consumible color-toner"></i>
+                            }
+
+                            @else if (consumible.tipo_consumible.tipo_consumible.toLowerCase().includes('unidad')) {
+                            <i class="bi bi-file-earmark-break icon-consumible color-unidad-imagen"></i>
+                            }
+
+                            @else if (consumible.tipo_consumible.tipo_consumible.toLowerCase().includes('kit')) {
+                            <i class="bi bi-wrench-adjustable icon-consumible color-kit"></i>
+                            }
+
+
+                            @else if (
+                            consumible.tipo_consumible.tipo_consumible.toLowerCase().includes('cian') ||
+                            consumible.tipo_consumible.tipo_consumible.toLowerCase().includes('cyan') ||
+                            consumible.tipo_consumible.tipo_consumible.toLowerCase().includes('azul cian')
+                            ) {
+                            <i class="bi bi-droplet-fill icon-consumible color-cian"></i>
+                            }
+
+                            @else if (
+                            consumible.tipo_consumible.tipo_consumible.toLowerCase().includes('negra') ||
+                            consumible.tipo_consumible.tipo_consumible.toLowerCase().includes('negro') 
+                            ) {
+                            <i class="bi bi-droplet-fill icon-consumible color-negro"></i>
+                            }
+
+                            @else if (
+                            consumible.tipo_consumible.tipo_consumible.toLowerCase().includes('amarillo') ||
+                            consumible.tipo_consumible.tipo_consumible.toLowerCase().includes('amarilla') 
+                            ) {
+                            <i class="bi bi-droplet-fill icon-consumible color-amarillo"></i>
+                            }
+
+                            @else if (
+                            consumible.tipo_consumible.tipo_consumible.toLowerCase().includes('magenta') ||
+                            consumible.tipo_consumible.tipo_consumible.toLowerCase().includes('magenta') 
+                            ) {
+                            <i class="bi bi-droplet-fill icon-consumible color-magenta"></i>
+                            }
+
+
+
+                            @else if (consumible.tipo_consumible.tipo_consumible.toLowerCase().includes('contenedor')) {
+                            <i class="bi bi-box-seam icon-consumible color-contenedor"></i>
+                            }
+
+                            @else {
+                            <i class="bi bi-gear-fill icon-consumible color-other"></i>
+                            }
+
+
+                        </div>
+                        <div class="consumable-info">
+                            <div>
+                                <label for="" class="consumable-type-text">{{ consumible.tipo_consumible.tipo_consumible
+                                    }}</label>
+                                <div class="consumable-name">
+                                    {{ consumible.nro_parte }}
+                                </div>
+                            </div>
+                            <div title="desasociar consumible"
+                                (click)="desasociarConsumible(consumible.id_modelo_consumible)">
+                                <i class="bi bi-x-circle icon-edit-model"></i>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                </div>
+
+                <div class="actions">
+                    <span class="status" [ngClass]="modelo.estado ? 'active-status' : 'inactive-status'">
+                        {{ modelo.estado ? 'ACTIVO' : 'INACTIVO' }}
+                    </span>
+                    <div title="modificar modelo">
+                        <i class="bi bi-pencil-fill icon-edit-model"
+                            (click)="openModalModeloUpdate(marca.id_marca, modelo)"></i>
+                    </div>
+                    <div title="eliminar modelo">
+                        <i class="bi bi-trash-fill icon-delete-model"></i>
+                    </div>
+                    <div title="agregar consumible" (click)="openModalConsumibleCreate(marca, modelo)">
+                        <i class="bi bi-droplet-half icon-edit-model">+</i>
+                    </div>
+                </div>
+
+            </div>
+
+            }
+
+        </div>
+
+    </div>
+    <br>
+    }
+
+    <div class="empty-state" *ngIf="listImpresorasTemp.length === 0">
+        <i class="bi bi-exclamation-triangle"></i>
+        <p>No hay impresoras registradas.</p>
+        <label (click)="openModalMarcaCreate()">+ Agregar una nueva impresora</label>
+    </div>
+    <div class="empty-state" *ngIf="listImpresorasTemp.length !== 0 &&  listImpresoras.length === 0">
+        <i class="bi bi-exclamation-triangle"></i>
+        <p>No se encontraron resultados.</p>
+    </div>
+
+</div>
+
+<!-- MODAL MARCA -->
+<div class="modal-overlay" *ngIf="isModalOpenMarca">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+        <!-- HEADER -->
+        <div class="modal-header">
+            <div>
+                <h2>Nueva Marca</h2>
+                <p>Complete la información para registrar una nueva marca.</p>
+            </div>
+            <button class="close-btn-modal" (click)="closeModalMarca()">×</button>
+        </div>
+
+        <!-- BODY -->
+        <div class="modal-body">
+            <div class="form-group">
+                <div class=" flex justify-between">
+                    <label>Nombre de la Marca</label>
+                    <span *ngIf="mostrarErrorMarcaForm" class="message-error-form">*campo requerido</span>
+                </div>
+
+                <div class="input-box">
+                    <i class="bi bi-tags-fill"></i>
+                    <input type="text" placeholder="Ej: Kiosera | Hp" name="nombre_marca" [(ngModel)]="marcaForm.marca">
+                </div>
+            </div>
+            <div class="status-box">
+                <div>
+                    <strong>
+                        Estado:
+                        <span [class.active]="isActiveMarca" [class.inactive]="!isActiveMarca">
+                            {{ isActiveMarca ? 'Activo' : 'Inactivo' }}
+                        </span>
+                    </strong>
+                    <p>Habilitar acceso inmediato</p>
+                </div>
+
+                <label class="switch">
+                    <input type="checkbox" [(ngModel)]="isActiveMarca">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="modal-footer">
+            <div class="modal-footer-box">
+                <button class="cancel-btn" (click)="closeModalMarca()">Cancelar</button>
+                <button class="save-btn" (click)="actionMarca()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL MODELO -->
+<div class="modal-overlay" *ngIf="isModalOpenModelo">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+        <!-- HEADER -->
+        <div class="modal-header">
+            <div>
+                <h2>Nuevo Modelo</h2>
+                <p>Complete la información para registrar una nueva modelo.</p>
+            </div>
+            <button class="close-btn-modal" (click)="closeModalModelo()">×</button>
+        </div>
+
+        <!-- BODY -->
+        <div class="modal-body">
+            <div class="form-group">
+
+                <div class=" flex justify-between">
+                    <label>Nombre del Modelo</label>
+                    <span *ngIf="mostrarErrorModeloForm" class="message-error-form">*Datos incompletos</span>
+                </div>
+
+
+                <div class="input-box">
+                    <i class="bi bi-tags-fill"></i>
+                    <input type="text" [(ngModel)]="modeloForm.modelo">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Tipo de Equipo</label>
+                <div class="search-container-out">
+                    <select [(ngModel)]="modeloForm.id_tipo_equipo">
+                        <option [value]="0" disabled selected>Seleccione equipo...</option>
+                        <option *ngFor="let item of tiposEquipo" [value]="item.id_tipo_equipo">
+                            {{ item.tipo_equipo }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="status-box">
+                <div>
+                    <strong>
+                        Estado:
+                        <span [class.active]="isActiveModelo" [class.inactive]="!isActiveModelo">
+                            {{ isActiveModelo ? 'Activo' : 'Inactivo' }}
+                        </span>
+                    </strong>
+                    <p>Habilitar acceso inmediato</p>
+                </div>
+
+                <label class="switch">
+                    <input type="checkbox" [(ngModel)]="isActiveModelo">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="modal-footer">
+            <div class="modal-footer-box">
+                <button class="cancel-btn" (click)="closeModalModelo()">Cancelar</button>
+                <button class="save-btn" (click)="actionModelo()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL CONSUMIBLE -->
+<div class="modal-overlay" *ngIf="isModalOpenConsumible">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+        <!-- HEADER -->
+        <div class="modal-header">
+            <div>
+                <h2>Nuevo Consumible</h2>
+                <span class="status detail-status">{{marcalabel}}</span>
+                <span class="status detail-status">{{modelolabel}}</span>
+                <span class="status detail-status">{{tipoEquipolabel}}</span>
+                <p style="margin-top: 8px;">Complete la información para agregar un nuevo consumible.</p>
+            </div>
+            <button class="close-btn-modal" (click)="closeModalConsumible()">×</button>
+        </div>
+
+        <!-- BODY -->
+        <div class="modal-body">
+
+            <!-- TIPO CONSUMIBLE -->
+            <div class="form-group">
+                <label>Tipo de Consumible</label>
+                <div class="search-container-out">
+                    <select [(ngModel)]="id_tipo_consumible_selected" (change)="onTipoConsumibleChange()">
+                        <option [value]="0" disabled selected disabled>Seleccione tipo consumible...</option>
+                        <option *ngFor="let item of tiposConsumible" [value]="item.id_tipo_consumible">
+                            {{ item.tipo_consumible }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+
+            <!-- CONSUMIBLE -->
+            <div class="form-group">
+                <label>Consumible</label>
+                <div class="search-container-out" *ngIf="listConsumiblesFiltrado.length > 0; else noConsumibles">
+                    <select [(ngModel)]="id_consumible_selected">
+                        <option [value]="0" disabled selected>Seleccione tipo consumible...</option>
+                        <option *ngFor="let item of listConsumiblesFiltrado" [value]="item.id_consumible">
+                            {{ item.nro_parte }}
+                        </option>
+                    </select>
+                </div>
+                <ng-template #noConsumibles>
+                    <div>
+                        <label for="" class="label-message">{{ConsumibleMessage}}</label>
+                    </div>
+                </ng-template>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="modal-footer">
+            <div class="modal-footer-box">
+                <button class="cancel-btn" (click)="closeModalConsumible()">Cancelar</button>
+                <button class="save-btn" (click)="asociarConsumible()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,122 @@
+.sidebar {
+  width: 270px;
+  height: 100vh;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  padding: 0px 12px;
+}
+
+.logo-area {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+ 
+}
+
+
+.logo-box {
+  width: 45px;
+  height: 45px;
+  background: #3461eb;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+}
+
+.logo-text {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  font-size: 1.25rem;
+    line-height: 1.75rem;
+  color: #224472;
+}
+
+.menu-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 0px;
+}
+
+
+.menu-section {
+  margin-bottom: 28px;
+}
+
+ .menu-section-title {
+  padding: 0 16px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #9ca3af;
+  letter-spacing: 1px;
+}
+
+.menu-items {
+  text-decoration: none ;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.menu-item {
+  height: 48px;
+  margin: 0 8px;
+  padding: 0 16px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  color: #374151;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+
+.menu-item i {
+  font-size: 18px;
+}
+
+
+.menu-item:hover {
+  background: #f3f4f6;
+}
+
+.menu-item.active {
+  background: #3461eb;
+  color: white;
+}
+
+
+.logout-section {
+  padding: 16px 8px;
+}
+
+.logout-btn {
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 16px;
+  color: #ef4444;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.logout-btn:hover {
+  background: #fef2f2;
+}
+
+

@@ -1,0 +1,33 @@
+<div class="topbar">
+
+  <div class="page-title">
+    {{ pageTitle }}
+  </div>
+
+  <div class="topbar-right">
+
+    <div class="notification-wrapper">
+      <i class="bi bi-bell"></i>
+      <span class="notification-badge" *ngIf="cantidadNotificaciones > 0">
+        {{ cantidadNotificaciones }}
+      </span>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="user-area">
+
+      <div class="user-info">
+        <div class="name">{{userName}}</div>
+        <div class="role">{{userRole}}</div>
+      </div>
+
+      <div class="avatar">
+        {{ userName.charAt(0) }}
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
